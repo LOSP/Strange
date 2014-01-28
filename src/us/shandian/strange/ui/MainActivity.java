@@ -10,17 +10,21 @@ import android.os.Bundle;
 import android.content.res.Configuration;
 
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.view.ViewPager;
 
 import us.shandian.strange.R;
+import us.shandian.strange.adapter.FragmentTabsAdapter;
 
-public class MainActivity extends Activity
+public class MainActivity extends FragmentActivity
 {
 	private DrawerLayout mDrawer;
 	private ListView mDrawerList;
 	private TextView mVersionName;
 	
 	private ActionBarDrawerToggle mToggle;
+	private FragmentTabsAdapter mAdapter;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -54,6 +58,13 @@ public class MainActivity extends Activity
 		// Hide the icon
 		getActionBar().setDisplayUseLogoEnabled(false);
 		getActionBar().setDisplayShowHomeEnabled(false);
+		
+		// Initialize tabs
+		mAdapter = new FragmentTabsAdapter(getSupportFragmentManager(), getActionBar(), (ViewPager) findViewById(R.id.activity_main_fragment_container));
+		
+		// TODO: Remove tests
+		mAdapter.addItem(new BaseFragment());
+		mAdapter.addItem(new BaseFragment());
 	}
 	
 	@Override
