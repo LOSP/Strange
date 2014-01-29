@@ -21,6 +21,11 @@ public class FileFragment extends BaseFragment implements OnItemClickListener
 	private GridView mGrid;
 	private FileAdapter mAdapter;
 	
+	public FileFragment() {
+		// TODO: replace this with default dir
+		this("/sdcard");
+	}
+	
 	public FileFragment(String dir) {
 		mDir = dir;
 		mTitle = dir;
