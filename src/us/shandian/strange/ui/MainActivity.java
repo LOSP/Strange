@@ -63,8 +63,9 @@ public class MainActivity extends FragmentActivity
 		mAdapter = new FragmentTabsAdapter(getSupportFragmentManager(), getActionBar(), (ViewPager) findViewById(R.id.activity_main_fragment_container));
 		
 		// TODO: Remove tests
-		mAdapter.addItem(new BaseFragment());
-		mAdapter.addItem(new BaseFragment());
+		mAdapter.addItem(new FileFragment("/sdcard"));
+		mAdapter.addItem(new FileFragment("/sdcard/AppPublish"));
+		mAdapter.addItem(new FileFragment("/sdcard/AppProjects"));
 	}
 	
 	@Override

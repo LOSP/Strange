@@ -1,0 +1,16 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    
+	<GridView
+		android:id="@+id/fragment_file_grid"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:numColumns="auto_fit"
+		android:verticalSpacing="10dp"
+		android:horizontalSpacing="10dp"
+		android:columnWidth="60dp"
+		android:stretchMode="columnWidth" />
+	
+</LinearLayout>
