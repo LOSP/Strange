@@ -81,6 +81,7 @@ public class FragmentTabsAdapter extends FragmentStatePagerAdapter implements Ta
 	public void onTabSelected(Tab tab, FragmentTransaction transaction)
 	{
 		mActionBar.setTitle(mFragments.get(tab.getPosition()).getPageTitle());
+		mPager.setCurrentItem(tab.getPosition());
 	}
 
 	@Override
