@@ -64,7 +64,7 @@ public class MainActivity extends FragmentActivity
 		
 		// TODO: Remove tests
 		mAdapter.addItem(new FileFragment("/sdcard"));
-		mAdapter.addItem(new FileFragment("/sdcard/AppPublish"));
+		mAdapter.addItem(new FileFragment("/sdcard/Download"));
 		mAdapter.addItem(new FileFragment("/sdcard/AppProjects"));
 	}
 	

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import us.shandian.strange.R;
 import us.shandian.strange.adapter.FileAdapter;
 import us.shandian.strange.type.FileItem;
+import us.shandian.strange.util.FileUtils;
 
 public class FileFragment extends BaseFragment implements OnItemClickListener
 {
@@ -20,6 +21,8 @@ public class FileFragment extends BaseFragment implements OnItemClickListener
 	
 	private GridView mGrid;
 	private FileAdapter mAdapter;
+	
+	private FileUtils mFileUtils;
 	
 	public FileFragment() {
 		// TODO: replace this with default dir
@@ -37,13 +40,11 @@ public class FileFragment extends BaseFragment implements OnItemClickListener
 		View view = inflater.inflate(R.layout.fragment_file, null);
 		mGrid = (GridView) view.findViewById(R.id.fragment_file_grid);
 		
-		// TODO: Implement file browser, not test code
-		ArrayList<FileItem> fileList = new ArrayList<FileItem>();
-		FileItem testFile = new FileItem("..", "..", true);
-		fileList.add(testFile);
+		// Load files
+		mFileUtils = new FileUtils(mDir);
 		
 		// Set adapter
-		mAdapter = new FileAdapter(getActivity(), fileList);
+		mAdapter = new FileAdapter(getActivity(), mFileUtils.getFileItems());
 		mGrid.setAdapter(mAdapter);
 		mGrid.setOnItemClickListener(this);
 		
