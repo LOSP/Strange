@@ -23,9 +23,10 @@ public class RootFileUtils extends FileUtils
 	@Override
 	public ArrayList<FileItem> getFileItems() {
 		ArrayList<FileItem> ret = new ArrayList<FileItem>();
-		String result = new CMDProcessor().su.runWaitFor("busybox ls -1F " + mDirPath + "/").stdout;
+		String result = new CMDProcessor().su.runWaitFor("busybox ls -1Fa " + mDirPath + "/").stdout;
 		String[] fileNames = result == null ? new String[0] : result.split("\n");
 		for (String f : fileNames) {
+			if (f.equals("./") || f.equals("../")) continue;
 			String name;
 			if (f.endsWith("@") || f.endsWith("*") || f.endsWith("/")) {
 				name = f.substring(0, f.length() - 1);
