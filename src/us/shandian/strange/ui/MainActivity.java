@@ -23,6 +23,7 @@ public class MainActivity extends FragmentActivity
 	private DrawerLayout mDrawer;
 	private ListView mDrawerList;
 	private TextView mVersionName;
+	private ViewPager mPager;
 	
 	private ActionBarDrawerToggle mToggle;
 	private FragmentTabsAdapter mAdapter;
@@ -64,13 +65,26 @@ public class MainActivity extends FragmentActivity
 		getActionBar().setDisplayShowHomeEnabled(false);
 		
 		// Initialize tabs
-		mAdapter = new FragmentTabsAdapter(getSupportFragmentManager(), getActionBar(), (ViewPager) findViewById(R.id.activity_main_fragment_container));
+		mPager = (ViewPager) findViewById(R.id.activity_main_fragment_container);
+		mAdapter = new FragmentTabsAdapter(getSupportFragmentManager(), getActionBar(), mPager);
 		
 		// TODO: Remove tests
 		mAdapter.addItem(new FileFragment("/sdcard"));
 		mAdapter.addItem(new FileFragment("/sdcard/Download"));
 		mAdapter.addItem(new FileFragment("/"));
 		mAdapter.addItem(new FileFragment("/data"));
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		mPager.setCurrentItem(getActionBar().getSelectedTab().getPosition());
+	}
+	
+	@Override
+	public void onStart() {
+		super.onStart();
+		mPager.setCurrentItem(getActionBar().getSelectedTab().getPosition());
 	}
 	
 	@Override
