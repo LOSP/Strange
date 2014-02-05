@@ -66,6 +66,7 @@ public class MainActivity extends FragmentActivity
 		mAdapter.addItem(new FileFragment("/sdcard"));
 		mAdapter.addItem(new FileFragment("/sdcard/Download"));
 		mAdapter.addItem(new FileFragment("/sdcard/AppProjects"));
+		// mAdapter.addItem(new FileFragment("/data"));
 	}
 	
 	@Override
