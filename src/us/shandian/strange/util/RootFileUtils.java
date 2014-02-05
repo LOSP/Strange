@@ -24,7 +24,7 @@ public class RootFileUtils extends FileUtils
 	public ArrayList<FileItem> getFileItems() {
 		ArrayList<FileItem> ret = new ArrayList<FileItem>();
 		String result = new CMDProcessor().su.runWaitFor("busybox ls -1F " + mDirPath + "/").stdout;
-		String[] fileNames = result.split("\n");
+		String[] fileNames = result == null ? new String[0] : result.split("\n");
 		for (String f : fileNames) {
 			String name;
 			if (f.endsWith("@") || f.endsWith("*") || f.endsWith("/")) {
