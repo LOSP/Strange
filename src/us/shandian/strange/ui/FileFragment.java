@@ -87,6 +87,10 @@ public class FileFragment extends BaseFragment implements OnItemClickListener
 					mAdapter = new FileAdapter(getActivity(), mFiles);
 				} catch (NullPointerException e) {
 					run();
+					
+					// The following should not be called
+					// But for safety, let's return
+					return;
 				}
 				mHandler.sendEmptyMessage(0);
 				
