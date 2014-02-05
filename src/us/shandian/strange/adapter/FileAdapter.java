@@ -109,8 +109,12 @@ public class FileAdapter extends BaseAdapter
 		if (position >= mLayouts.size()) {
 			return convertView;
 		} else {
-			if (!mLoadeds.get(position) && mFiles.get(position).name.toLowerCase().endsWith(".apk")) {
-				new Thread(new IconLoader(position)).start();
+			if (!mLoadeds.get(position)) {
+				// Only load once
+				mLoadeds.set(position, true);
+				if (mFiles.get(position).name.toLowerCase().endsWith(".apk")) {
+					new Thread(new IconLoader(position)).start();
+				}
 			}
 			return mLayouts.get(position);
 		}
@@ -131,7 +135,6 @@ public class FileAdapter extends BaseAdapter
 			info.sourceDir = f.path;
 			info.publicSourceDir = f.path;
 			Drawable icon = info.loadIcon(mContext.getPackageManager());
-			mLoadeds.set(position, true);
 			mHandler.sendMessage(mHandler.obtainMessage(position, icon));
 		}
 	}
