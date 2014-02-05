@@ -65,9 +65,14 @@ public class FileFragment extends BaseFragment implements OnItemClickListener
 		
 		// Start loading thread
 		new Thread(new Runnable() {
+			private boolean looperPrepared = false;
+			
 			@Override
 			public void run() {
-				Looper.prepare();
+				if (!looperPrepared) {
+					Looper.prepare();
+					looperPrepared = true;
+				}
 				
 				// Do some loading
 				try {
