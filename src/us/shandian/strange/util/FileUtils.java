@@ -1,6 +1,7 @@
 package us.shandian.strange.util;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Collections;
@@ -24,7 +25,23 @@ public class FileUtils
 			String path = f.getPath();
 			String name = f.getName();
 			boolean isDir = f.isDirectory();
-			ret.add(new FileItem(path, name, isDir));
+			boolean isSymLink;
+			try {
+				String absolutePath = f.getAbsolutePath();
+				String canonicalPath = f.getCanonicalPath();
+				String parentAbsolute = mDir.getAbsolutePath();
+				String parentCanonical = mDir.getCanonicalPath();
+				
+				if (!parentAbsolute.equals(parentCanonical)) {
+					// Parent floder itself is a symlink
+					absolutePath = absolutePath.replaceFirst(parentAbsolute, parentCanonical);
+				}
+				
+				isSymLink = !absolutePath.equals(canonicalPath);
+			} catch (IOException e) {
+				isSymLink = false;
+			}
+			ret.add(new FileItem(path, name, isDir, isSymLink));
 		}
 		
 		Collections.sort(ret, new Comparator<FileItem>() {
@@ -45,7 +62,7 @@ public class FileUtils
 		});
 		
 		if (!isRoot()) {
-			ret.add(0, new FileItem("..", "..", true));
+			ret.add(0, new FileItem("..", "..", true, false));
 		}
 		
 		return ret;

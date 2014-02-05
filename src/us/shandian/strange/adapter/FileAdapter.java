@@ -61,6 +61,11 @@ public class FileAdapter extends BaseAdapter
 				colorText.getPaint().setFakeBoldText(true);
 			}
 			
+			if (f.isSymLink) {
+				colorText.getPaint().setFakeBoldText(true);
+				colorText.getPaint().setUnderlineText(true);
+			}
+			
 			// Add to list
 			mLayouts.add(layout);
 		}
