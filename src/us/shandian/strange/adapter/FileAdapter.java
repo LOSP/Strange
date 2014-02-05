@@ -38,6 +38,7 @@ public class FileAdapter extends BaseAdapter
 	private ArrayList<FileItem> mFiles;
 	
 	private ArrayList<LinearLayout> mLayouts = new ArrayList<LinearLayout>();
+	private ArrayList<Boolean> mLoadeds = new ArrayList<Boolean>();
 	
 	private Handler mHandler = new Handler() {
 		@Override
@@ -83,6 +84,8 @@ public class FileAdapter extends BaseAdapter
 			
 			// Add to list
 			mLayouts.add(layout);
+			
+			mLoadeds.add(false);
 		}
 	}
 	
@@ -106,7 +109,9 @@ public class FileAdapter extends BaseAdapter
 		if (position >= mLayouts.size()) {
 			return convertView;
 		} else {
-			new Thread(new IconLoader(position)).start();
+			if (!mLoadeds.get(position) && mFiles.get(position).name.toLowerCase().endsWith(".apk")) {
+				new Thread(new IconLoader(position)).start();
+			}
 			return mLayouts.get(position);
 		}
 	}
@@ -121,15 +126,13 @@ public class FileAdapter extends BaseAdapter
 		@Override
 		public void run() {
 			FileItem f = mFiles.get(position);
-			if (!f.isDir && f.name.toLowerCase().endsWith(".apk")) {
-				// Apk file, use its icon
-				ApplicationInfo info = mContext.getPackageManager().getPackageArchiveInfo(f.path, PackageManager.GET_ACTIVITIES)
-					.applicationInfo;
-				info.sourceDir = f.path;
-				info.publicSourceDir = f.path;
-				Drawable icon = info.loadIcon(mContext.getPackageManager());
-				mHandler.sendMessage(mHandler.obtainMessage(position, icon));
-			}
+			ApplicationInfo info = mContext.getPackageManager().getPackageArchiveInfo(f.path, PackageManager.GET_ACTIVITIES)
+										.applicationInfo;
+			info.sourceDir = f.path;
+			info.publicSourceDir = f.path;
+			Drawable icon = info.loadIcon(mContext.getPackageManager());
+			mLoadeds.set(position, true);
+			mHandler.sendMessage(mHandler.obtainMessage(position, icon));
 		}
 	}
 	
