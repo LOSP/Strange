@@ -75,6 +75,10 @@ public class MainActivity extends FragmentActivity
 		mAdapter.addItem(new FileFragment("/data"));
 	}
 	
+	protected FragmentTabsAdapter getFragmentTabsAdapter() {
+		return mAdapter;
+	}
+	
 	@Override
 	public void onResume() {
 		super.onResume();

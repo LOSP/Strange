@@ -60,49 +60,71 @@ public class FileFragment extends BaseFragment implements OnItemClickListener
 		mProgress = (ProgressBar) view.findViewById(R.id.fragment_file_wait);
 		mGrid = (GridView) view.findViewById(R.id.fragment_file_grid);
 		
-		// Load files
-		mFileUtils = new FileUtils(mDir);
-		
-		// Start loading thread
-		new Thread(new Runnable() {
-			private boolean looperPrepared = false;
-			
-			@Override
-			public void run() {
-				if (!looperPrepared) {
-					Looper.prepare();
-					looperPrepared = true;
-				}
-				
-				// Do some loading
-				try {
-					mFiles = mFileUtils.getFileItems();
-				} catch (NullPointerException e) {
-					// Permission denied, use root
-					mFileUtils = new RootFileUtils(mDir);
-					mFiles = mFileUtils.getFileItems();
-				}
-				
-				try {
-					mAdapter = new FileAdapter(getActivity(), mFiles);
-				} catch (NullPointerException e) {
-					run();
-					
-					// The following should not be called
-					// But for safety, let's return
-					return;
-				}
-				mHandler.sendEmptyMessage(0);
-				
-				Looper.loop();
-			}
-		}).start();
+		loadFiles();
 		
 		return view;
 	}
 	
+	private void loadFiles() {
+		mProgress.setVisibility(View.VISIBLE);
+		mGrid.setVisibility(View.GONE);
+		
+		// Load files
+		mFileUtils = new FileUtils(mDir);
+
+		// Start loading thread
+		new Thread(new Runnable() {
+				private boolean looperPrepared = false;
+
+				@Override
+				public void run() {
+					if (!looperPrepared) {
+						Looper.prepare();
+						looperPrepared = true;
+					}
+
+					// Do some loading
+					try {
+						mFiles = mFileUtils.getFileItems();
+					} catch (NullPointerException e) {
+						// Permission denied, use root
+						mFileUtils = new RootFileUtils(mDir);
+						mFiles = mFileUtils.getFileItems();
+					}
+
+					try {
+						mAdapter = new FileAdapter(getActivity(), mFiles);
+					} catch (NullPointerException e) {
+						run();
+
+						// The following should not be called
+						// But for safety, let's return
+						return;
+					}
+					mHandler.sendEmptyMessage(0);
+
+					Looper.loop();
+				}
+			}).start();
+	}
+	
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		// TODO: Implement this method
+		FileItem f = (FileItem) mAdapter.getItem(position);
+		if (f.isDir) {
+			// Switch into a dir
+			if (f.path.trim().length() == 0) {
+				f.path = "/";
+			}
+			
+			mDir = f.path;
+			mTitle = f.path;
+			
+			MainActivity activity = (MainActivity) getActivity();
+			activity.getFragmentTabsAdapter().renameItem(this);
+			activity.getActionBar().setTitle(mTitle);
+			
+			loadFiles();
+		}
 	}
 }

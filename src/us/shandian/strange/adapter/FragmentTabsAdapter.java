@@ -44,11 +44,24 @@ public class FragmentTabsAdapter extends FragmentStatePagerAdapter implements Ta
 		return getCount() - 1;
 	}
 	
+	public void renameItem(int position) {
+		mActionBar.getTabAt(position).setText(mFragments.get(position).getPageTitle());
+		notifyDataSetChanged();
+	}
+	
+	public void renameItem(BaseFragment item) {
+		renameItem(getItemPos(item));
+	}
+	
 	public void removeItem(int position) {
 		if (position >= getCount()) return;
 		mActionBar.removeTabAt(position);
 		mManager.beginTransaction().remove(mFragments.remove(position)).commit();
 		notifyDataSetChanged();
+	}
+	
+	public int getItemPos(BaseFragment item) {
+		return mFragments.indexOf(item);
 	}
 	
 	@Override

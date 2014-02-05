@@ -51,7 +51,7 @@ public class RootFileUtils extends FileUtils
 			});
 		
 		if (!isRoot()) {
-			ret.add(0, new FileItem("..", "..", true, false));
+			ret.add(0, new FileItem(getParent(), "..", true, false));
 		}
 		
 		return ret;

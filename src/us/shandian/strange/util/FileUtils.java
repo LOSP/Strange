@@ -62,13 +62,17 @@ public class FileUtils
 		});
 		
 		if (!isRoot()) {
-			ret.add(0, new FileItem("..", "..", true, false));
+			ret.add(0, new FileItem(getParent(), "..", true, false));
 		}
 		
 		return ret;
 	}
 	
 	public boolean isRoot() {
-		return mDir.getPath() == "/";
+		return mDir.getPath().equals("/");
+	}
+	
+	public String getParent() {
+		return isRoot() ? mDir.getPath() : mDir.getPath().substring(0, mDir.getPath().lastIndexOf("/"));
 	}
 }
