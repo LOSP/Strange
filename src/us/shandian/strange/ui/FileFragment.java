@@ -18,6 +18,7 @@ import us.shandian.strange.R;
 import us.shandian.strange.adapter.FileAdapter;
 import us.shandian.strange.type.FileItem;
 import us.shandian.strange.util.FileUtils;
+import us.shandian.strange.util.RootFileUtils;
 
 public class FileFragment extends BaseFragment implements OnItemClickListener
 {
@@ -68,7 +69,9 @@ public class FileFragment extends BaseFragment implements OnItemClickListener
 				try {
 					mFiles = mFileUtils.getFileItems();
 				} catch (NullPointerException e) {
-					// TODO: NO PERMISSION, USE ROOT
+					// Permission denied, use root
+					mFileUtils = new RootFileUtils(mDir);
+					mFiles = mFileUtils.getFileItems();
 				}
 				mAdapter = new FileAdapter(getActivity(), mFiles);
 				mHandler.sendEmptyMessage(0);

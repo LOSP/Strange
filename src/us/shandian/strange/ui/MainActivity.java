@@ -16,6 +16,7 @@ import android.support.v4.view.ViewPager;
 
 import us.shandian.strange.R;
 import us.shandian.strange.adapter.FragmentTabsAdapter;
+import us.shandian.strange.util.CMDProcessor;
 
 public class MainActivity extends FragmentActivity
 {
@@ -30,6 +31,9 @@ public class MainActivity extends FragmentActivity
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		// Output busybox
+		CMDProcessor.exportBusybox(this);
 		
 		// Initialize the drawer
 		mDrawer = (DrawerLayout) findViewById(R.id.activity_main_drawer);
@@ -65,8 +69,8 @@ public class MainActivity extends FragmentActivity
 		// TODO: Remove tests
 		mAdapter.addItem(new FileFragment("/sdcard"));
 		mAdapter.addItem(new FileFragment("/sdcard/Download"));
-		mAdapter.addItem(new FileFragment("/sdcard/AppProjects"));
-		// mAdapter.addItem(new FileFragment("/data"));
+		mAdapter.addItem(new FileFragment("/"));
+		mAdapter.addItem(new FileFragment("/data"));
 	}
 	
 	@Override
