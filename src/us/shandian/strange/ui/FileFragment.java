@@ -34,7 +34,6 @@ public class FileFragment extends BaseFragment implements OnItemClickListener
 		@Override
 		public void handleMessage(Message msg) {
 			// This is only for loading thread
-			mAdapter = new FileAdapter(getActivity(), mFiles);
 			mGrid.setAdapter(mAdapter);
 			mGrid.setOnItemClickListener(FileFragment.this);
 			mProgress.setVisibility(View.GONE);
@@ -71,6 +70,7 @@ public class FileFragment extends BaseFragment implements OnItemClickListener
 				} catch (NullPointerException e) {
 					// TODO: NO PERMISSION, USE ROOT
 				}
+				mAdapter = new FileAdapter(getActivity(), mFiles);
 				mHandler.sendEmptyMessage(0);
 			}
 		}).start();
