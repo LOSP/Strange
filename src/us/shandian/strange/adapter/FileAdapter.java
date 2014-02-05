@@ -7,6 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.LayoutInflater;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.content.pm.ApplicationInfo;
+import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.os.Message;
 
 import java.util.ArrayList;
 
@@ -33,6 +38,16 @@ public class FileAdapter extends BaseAdapter
 	private ArrayList<FileItem> mFiles;
 	
 	private ArrayList<LinearLayout> mLayouts = new ArrayList<LinearLayout>();
+	
+	private Handler mHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			// Icon loaded, set as background
+			LinearLayout layout = mLayouts.get(msg.what);
+			TextView colorText = (TextView) layout.findViewById(R.id.fragment_file_grid_item_color_text);
+			colorText.post(new IconChanger((Drawable) msg.obj, colorText));
+		}
+	};
 	
 	public FileAdapter(Context context, ArrayList<FileItem> files) {
 		mContext = context;
@@ -88,7 +103,49 @@ public class FileAdapter extends BaseAdapter
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		return position < mLayouts.size() ? mLayouts.get(position) : convertView;
+		if (position >= mLayouts.size()) {
+			return convertView;
+		} else {
+			new Thread(new IconLoader(position)).start();
+			return mLayouts.get(position);
+		}
 	}
 
+	private class IconLoader implements Runnable {
+		private int position;
+		
+		public IconLoader(int position) {
+			this.position = position;
+		}
+		
+		@Override
+		public void run() {
+			FileItem f = mFiles.get(position);
+			if (!f.isDir && f.name.toLowerCase().endsWith(".apk")) {
+				// Apk file, use its icon
+				ApplicationInfo info = mContext.getPackageManager().getPackageArchiveInfo(f.path, PackageManager.GET_ACTIVITIES)
+					.applicationInfo;
+				info.sourceDir = f.path;
+				info.publicSourceDir = f.path;
+				Drawable icon = info.loadIcon(mContext.getPackageManager());
+				mHandler.sendMessage(mHandler.obtainMessage(position, icon));
+			}
+		}
+	}
+	
+	private class IconChanger implements Runnable {
+		private Drawable icon;
+		private TextView view;
+		
+		public IconChanger(Drawable icon, TextView view) {
+			this.icon = icon;
+			this.view = view;
+		}
+		
+		@Override
+		public void run() {
+			view.setText("");
+			view.setBackgroundDrawable(icon);
+		}
+	}
 }

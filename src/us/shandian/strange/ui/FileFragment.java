@@ -10,6 +10,7 @@ import android.widget.GridView.OnItemClickListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Looper;
 
 import java.util.ArrayList;
 import java.lang.NullPointerException;
@@ -66,6 +67,9 @@ public class FileFragment extends BaseFragment implements OnItemClickListener
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
+				Looper.prepare();
+				
+				// Do some loading
 				try {
 					mFiles = mFileUtils.getFileItems();
 				} catch (NullPointerException e) {
@@ -80,6 +84,8 @@ public class FileFragment extends BaseFragment implements OnItemClickListener
 					run();
 				}
 				mHandler.sendEmptyMessage(0);
+				
+				Looper.loop();
 			}
 		}).start();
 		
