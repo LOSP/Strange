@@ -26,7 +26,12 @@ public class RootFileUtils extends FileUtils
 		String result = new CMDProcessor().su.runWaitFor("busybox ls -1F " + mDirPath + "/").stdout;
 		String[] fileNames = result.split("\n");
 		for (String f : fileNames) {
-			String name = f.substring(0, f.length() - 1);
+			String name;
+			if (f.endsWith("@") || f.endsWith("*") || f.endsWith("/")) {
+				name = f.substring(0, f.length() - 1);
+			} else {
+				name = f;
+			}
 			String path = mDirPath + "/" + name;
 			boolean isDir = f.endsWith("/") ? true : false;
 			boolean isSymLink = f.endsWith("@") ? true : false;
