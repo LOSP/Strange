@@ -9,4 +9,8 @@ public class BaseFragment extends Fragment
 	public String getPageTitle() {
 		return mTitle;
 	}
+	
+	public void goBack() {
+		// Do nothing by default
+	}
 }

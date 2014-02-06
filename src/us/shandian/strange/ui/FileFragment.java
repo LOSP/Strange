@@ -113,18 +113,31 @@ public class FileFragment extends BaseFragment implements OnItemClickListener
 		FileItem f = (FileItem) mAdapter.getItem(position);
 		if (f.isDir) {
 			// Switch into a dir
-			if (f.path.trim().length() == 0) {
-				f.path = "/";
-			}
-			
-			mDir = f.path;
-			mTitle = f.path;
-			
-			MainActivity activity = (MainActivity) getActivity();
-			activity.getFragmentTabsAdapter().renameItem(this);
-			activity.getActionBar().setTitle(mTitle);
-			
-			loadFiles();
+			goTo(f.path);
+		}
+	}
+	
+	private void goTo(String path) {
+		if (path.trim().length() == 0) {
+			path = "/";
+		}
+
+		mDir = path;
+		mTitle = path;
+
+		MainActivity activity = (MainActivity) getActivity();
+		activity.getFragmentTabsAdapter().renameItem(this);
+		activity.getActionBar().setTitle(mTitle);
+
+		loadFiles();
+	}
+	
+	@Override
+	public void goBack() {
+		if (!mFileUtils.isRoot()) {
+			goTo(mFileUtils.getParent());
+		} else {
+			getActivity().finish();
 		}
 	}
 }

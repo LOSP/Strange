@@ -138,4 +138,11 @@ public class MainActivity extends FragmentActivity
 		
 		return super.onOptionsItemSelected(item);
 	}
+
+	@Override
+	public void onBackPressed()
+	{
+		mAdapter.getItem(mPager.getCurrentItem()).goBack();
+	}
+	
 }
