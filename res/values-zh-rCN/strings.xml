@@ -4,4 +4,7 @@
 	<!-- Navigation Drawer -->
 	<string name="drawer_about">关于</string>
 
+	<!-- File Drawer -->
+	<string name="drawer_file_title_default">没有选中的文件</string>
+	
 </resources>

@@ -6,4 +6,7 @@
 	<!-- Navigation Drawer -->
 	<string name="drawer_about">About</string>
 	
+	<!-- File Drawer -->
+	<string name="drawer_file_title_default">No File Selected</string>
+	
 </resources>

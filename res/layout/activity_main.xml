@@ -54,5 +54,43 @@
 			android:background="#F6F6F6" />
 		
 	</LinearLayout>
+	
+	<LinearLayout
+		android:layout_width="240dp"
+		android:layout_height="match_parent"
+		android:layout_gravity="end"
+		android:orientation="vertical" >
+
+		<LinearLayout
+			android:layout_width="240dp"
+			android:layout_height="60dp"
+			android:paddingLeft="10dp"
+			android:paddingTop="10dp"
+			android:paddingBottom="10dp"
+			android:background="#6F6F6F"
+			android:orientation="horizontal" >
+
+			<TextView
+				android:id="@+id/activity_main_drawer_file_name"
+				android:layout_width="wrap_content"
+				android:layout_height="match_parent"
+				android:paddingLeft="10dp"
+				android:gravity="center_vertical"
+				android:textAppearance="?android:attr/textAppearanceLarge"
+				android:text="@string/drawer_file_title_default"
+				android:textColor="#F6F6F6" />
+
+		</LinearLayout>
+
+		<ListView
+			android:id="@+id/activity_main_drawer_file_actions"
+			android:layout_width="240dp"
+			android:layout_height="match_parent"
+			android:choiceMode="singleChoice"
+			android:divider="#E0E0E0"
+			android:dividerHeight="1dp"
+			android:background="#F6F6F6" />
+
+	</LinearLayout>
     
 </android.support.v4.widget.DrawerLayout>

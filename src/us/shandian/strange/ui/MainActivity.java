@@ -1,7 +1,9 @@
 package us.shandian.strange.ui;
 
 import android.app.Activity;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MenuInflater;
 import android.view.Gravity;
 import android.widget.TextView;
 import android.widget.ListView;
@@ -25,6 +27,10 @@ public class MainActivity extends FragmentActivity
 	private TextView mVersionName;
 	private ViewPager mPager;
 	
+	// Drawer for file
+	private TextView mFileName;
+	private ListView mFileActions;
+	
 	private ActionBarDrawerToggle mToggle;
 	private FragmentTabsAdapter mAdapter;
 	
@@ -42,6 +48,7 @@ public class MainActivity extends FragmentActivity
 		
 		mDrawer.setDrawerListener(mToggle);
 		mDrawer.setDrawerShadow(R.drawable.drawer_shadow, Gravity.START);
+		mDrawer.setDrawerShadow(R.drawable.panel_shadow, Gravity.END);
 		
 		mDrawerList = (ListView) findViewById(R.id.activity_main_drawer_list);
 		mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.activity_main_drawer_list_item, getResources().getStringArray(R.array.drawer_items)));
@@ -55,6 +62,10 @@ public class MainActivity extends FragmentActivity
 			// So what?
 		}
 		mVersionName.setText("v " + version);
+		
+		// File Drawer
+		mFileName = (TextView) findViewById(R.id.activity_main_drawer_file_name);
+		mFileActions = (ListView) findViewById(R.id.activity_main_drawer_file_actions);
 		
 		// Show "Up" button (Replaced by DrawerLayout)
 		getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -77,6 +88,14 @@ public class MainActivity extends FragmentActivity
 	
 	protected FragmentTabsAdapter getFragmentTabsAdapter() {
 		return mAdapter;
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.activity_main_menu, menu);
+		return true;
 	}
 	
 	@Override
@@ -105,7 +124,18 @@ public class MainActivity extends FragmentActivity
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Well, do all the things for me
-		return mToggle.onOptionsItemSelected(item);
+		switch (item.getItemId()) {
+			case R.id.activity_main_menu_right:
+				if (mDrawer.isDrawerOpen(Gravity.END)) {
+					mDrawer.closeDrawer(Gravity.END);
+				} else {
+					mDrawer.openDrawer(Gravity.END);
+				}
+				break;
+			case android.R.id.home:
+				return mToggle.onOptionsItemSelected(item);
+		}
+		
+		return super.onOptionsItemSelected(item);
 	}
 }
