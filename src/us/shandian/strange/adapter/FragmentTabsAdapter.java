@@ -63,6 +63,13 @@ public class FragmentTabsAdapter extends FragmentStatePagerAdapter implements Ta
 	public int getItemPos(BaseFragment item) {
 		return mFragments.indexOf(item);
 	}
+
+	@Override
+	public int getItemPosition(Object object)
+	{
+		// Force reload
+		return POSITION_NONE;
+	}
 	
 	@Override
 	public BaseFragment getItem(int position) {
@@ -74,6 +81,10 @@ public class FragmentTabsAdapter extends FragmentStatePagerAdapter implements Ta
 		return mFragments.size();
 	}
 
+	public int getCurrent() {
+		return mPager.getCurrentItem();
+	}
+	
 	@Override
 	public void onPageScrolled(int p1, float p2, int p3) {
 		// TODO: Implement this method
