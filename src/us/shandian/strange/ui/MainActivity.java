@@ -1,6 +1,7 @@
 package us.shandian.strange.ui;
 
 import android.app.Activity;
+import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuInflater;
@@ -8,6 +9,8 @@ import android.view.Gravity;
 import android.widget.TextView;
 import android.widget.ListView;
 import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.os.Bundle;
 import android.content.res.Configuration;
 
@@ -20,8 +23,11 @@ import us.shandian.strange.R;
 import us.shandian.strange.adapter.FragmentTabsAdapter;
 import us.shandian.strange.util.CMDProcessor;
 
-public class MainActivity extends FragmentActivity
+public class MainActivity extends FragmentActivity implements OnItemClickListener
 {
+	private static final int DRAWER_MAIN_NEW = 0;
+	private static final int DRAWER_MAIN_CLOSE = 1;
+	
 	private DrawerLayout mDrawer;
 	private ListView mDrawerList;
 	private TextView mVersionName;
@@ -52,6 +58,7 @@ public class MainActivity extends FragmentActivity
 		
 		mDrawerList = (ListView) findViewById(R.id.activity_main_drawer_list);
 		mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.activity_main_drawer_list_item, getResources().getStringArray(R.array.drawer_items)));
+		mDrawerList.setOnItemClickListener(this);
 		
 		// Display my version name
 		mVersionName = (TextView) findViewById(R.id.activity_main_drawer_version_name);
@@ -79,11 +86,9 @@ public class MainActivity extends FragmentActivity
 		mPager = (ViewPager) findViewById(R.id.activity_main_fragment_container);
 		mAdapter = new FragmentTabsAdapter(getSupportFragmentManager(), getActionBar(), mPager);
 		
-		// TODO: Remove tests
+		// TODO: Replace this with restoring state of last time's
 		mAdapter.addItem(new FileFragment("/sdcard"));
-		mAdapter.addItem(new FileFragment("/sdcard/Download"));
 		mAdapter.addItem(new FileFragment("/"));
-		mAdapter.addItem(new FileFragment("/data"));
 	}
 	
 	protected FragmentTabsAdapter getFragmentTabsAdapter() {
@@ -143,6 +148,29 @@ public class MainActivity extends FragmentActivity
 	public void onBackPressed()
 	{
 		mAdapter.getItem(mPager.getCurrentItem()).goBack();
+	}
+	
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		if (parent == mDrawerList) {
+			// Handle event from drawer list
+			switch (position) {
+				case DRAWER_MAIN_NEW:
+					// TODO Replace this with customize default new tab path
+					mAdapter.addItem(new FileFragment("/"));
+					mAdapter.setCurrentItem(mAdapter.getCount() - 1);
+					break;
+				case DRAWER_MAIN_CLOSE:
+					// Close current tab
+					if (mAdapter.getCount() == 1) {
+						// Tabs must exist
+						// TODO Replace this with customize default new tab path
+						mAdapter.addItem(new FileFragment("/"));
+					}
+					mAdapter.removeItem(mAdapter.getCurrent());
+					break;
+			}
+		}
 	}
 	
 }

@@ -4,6 +4,8 @@
     <string name="app_name" translatable="false">Strange</string>
 
 	<!-- Navigation Drawer -->
+	<string name="drawer_new">New Tab</string>
+	<string name="drawer_close">Close Tab</string>
 	<string name="drawer_about">About</string>
 	
 	<!-- File Drawer -->

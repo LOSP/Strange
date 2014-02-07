@@ -2,6 +2,8 @@
 <resources>
 
 	<!-- Navigation Drawer -->
+	<string name="drawer_new">新建标签页</string>
+	<string name="drawer_close">关闭标签页</string>
 	<string name="drawer_about">关于</string>
 
 	<!-- File Drawer -->
