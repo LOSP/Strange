@@ -52,7 +52,7 @@ public class FileUtils
 					if (p1.isDir && !p2.isDir) {
 						return -1;
 					} else if(!p1.isDir && p2.isDir) {
-						return 0;
+						return 1;
 					} else {
 						return Collator.getInstance().compare(p1.name, p2.name);
 					}
