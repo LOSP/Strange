@@ -32,6 +32,8 @@ public class FileFragment extends BaseFragment implements OnItemClickListener
 	private FileUtils mFileUtils;
 	private ArrayList<FileItem> mFiles;
 	
+	private boolean mLoaderFinished = true;
+	
 	private Handler mHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
@@ -40,6 +42,7 @@ public class FileFragment extends BaseFragment implements OnItemClickListener
 			mGrid.setOnItemClickListener(FileFragment.this);
 			mProgress.setVisibility(View.GONE);
 			mGrid.setVisibility(View.VISIBLE);
+			mLoaderFinished = true;
 		}
 	};
 	
@@ -72,6 +75,8 @@ public class FileFragment extends BaseFragment implements OnItemClickListener
 	}
 	
 	private void loadFiles() {
+		mLoaderFinished = false;
+		
 		mProgress.setVisibility(View.VISIBLE);
 		mGrid.setVisibility(View.GONE);
 		
@@ -142,10 +147,12 @@ public class FileFragment extends BaseFragment implements OnItemClickListener
 	
 	@Override
 	public void goBack() {
-		if (!mFileUtils.isRoot()) {
-			goTo(mFileUtils.getParent());
-		} else {
-			getActivity().finish();
+		if (mLoaderFinished) {
+			if (!mFileUtils.isRoot()) {
+				goTo(mFileUtils.getParent());
+			} else {
+				getActivity().finish();
+			}
 		}
 	}
 }
