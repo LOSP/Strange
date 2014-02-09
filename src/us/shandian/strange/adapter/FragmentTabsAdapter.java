@@ -14,9 +14,18 @@ import android.app.FragmentTransaction;
 import java.util.ArrayList;
 
 import us.shandian.strange.ui.BaseFragment;
+import us.shandian.strange.ui.MainActivity;
 
 public class FragmentTabsAdapter extends FragmentStatePagerAdapter implements TabListener, OnPageChangeListener
 {
+	private static final int[] COLORS = new int[] {
+		android.R.color.holo_green_dark,
+		android.R.color.holo_red_dark,
+		android.R.color.holo_purple,
+		android.R.color.holo_blue_dark,
+		android.R.color.holo_orange_dark
+	};
+	
 	private ArrayList<BaseFragment> mFragments = new ArrayList<BaseFragment>();
 	private ActionBar mActionBar;
 	private ViewPager mPager;
@@ -102,6 +111,7 @@ public class FragmentTabsAdapter extends FragmentStatePagerAdapter implements Ta
 	public void onPageSelected(int position) {
 		mActionBar.setSelectedNavigationItem(position);
 		mActionBar.setTitle(mFragments.get(position).getPageTitle());
+		tintStatus(mFragments.get(position));
 	}
 
 	@Override
@@ -114,6 +124,7 @@ public class FragmentTabsAdapter extends FragmentStatePagerAdapter implements Ta
 	{
 		mActionBar.setTitle(mFragments.get(tab.getPosition()).getPageTitle());
 		mPager.setCurrentItem(tab.getPosition());
+		tintStatus(mFragments.get(tab.getPosition()));
 	}
 
 	@Override
@@ -126,5 +137,23 @@ public class FragmentTabsAdapter extends FragmentStatePagerAdapter implements Ta
 	public void onTabReselected(Tab tab, FragmentTransaction transaction)
 	{
 		// TODO: Implement this method
+	}
+	
+	public void tintStatus(BaseFragment fragment) {
+		// Only current is allowed
+		if (mFragments.get(getCurrent()) != fragment) return;
+		MainActivity activity = (MainActivity) fragment.getActivity();
+		if (activity == null) return;
+		String dir = fragment.getPageTitle();
+		// Set Tint Color
+		int id;
+		try {
+			id = dir.charAt(dir.lastIndexOf("/") + 1) % 5;
+		} catch (Exception e) {
+			id = dir.charAt(0) % 5;
+		}
+		int tintColor = activity.getResources().getColor(COLORS[id]);
+		activity.setTintColor(tintColor);
+		android.util.Log.d("Strange", "newTitle = " + fragment.getPageTitle());
 	}
 }

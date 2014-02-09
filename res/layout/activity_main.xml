@@ -1,96 +1,121 @@
-<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/activity_main_drawer"
-	android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/activity_main_root"
+	android:layout_height="match_parent"
+	android:layout_width="match_parent">
+
+	<RelativeLayout
+		android:id="@+id/activity_main_container"
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content">
+
+		<android.support.v4.widget.DrawerLayout
+			android:id="@+id/activity_main_drawer"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent">
+
+			<android.support.v4.view.ViewPager
+				android:id="@+id/activity_main_fragment_container"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"/>
+
+			<LinearLayout
+				android:layout_width="240dp"
+				android:layout_height="match_parent"
+				android:layout_gravity="start"
+				android:orientation="vertical">
+
+				<LinearLayout
+					android:layout_width="240dp"
+					android:layout_height="60dp"
+					android:paddingLeft="10dp"
+					android:paddingTop="10dp"
+					android:paddingBottom="10dp"
+					android:background="#6F6F6F"
+					android:orientation="horizontal">
+
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="match_parent"
+						android:gravity="center_vertical"
+						android:textAppearance="?android:attr/textAppearanceLarge"
+						android:text="@string/app_name"
+						android:textStyle="bold|italic"
+						android:textColor="#F6F6F6"/>
+
+					<TextView
+						android:id="@+id/activity_main_drawer_version_name"
+						android:layout_width="wrap_content"
+						android:layout_height="match_parent"
+						android:paddingLeft="10dp"
+						android:gravity="center_vertical"
+						android:textAppearance="?android:attr/textAppearanceLarge"
+						android:text="v 0.0.0"
+						android:textColor="#F6F6F6"/>
+
+				</LinearLayout>
+
+				<ListView
+					android:id="@+id/activity_main_drawer_list"
+					android:layout_width="240dp"
+					android:layout_height="match_parent"
+					android:choiceMode="singleChoice"
+					android:divider="#E0E0E0"
+					android:dividerHeight="1dp"
+					android:background="#F6F6F6"/>
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:layout_width="240dp"
+				android:layout_height="match_parent"
+				android:layout_gravity="end"
+				android:orientation="vertical">
+
+				<LinearLayout
+					android:layout_width="240dp"
+					android:layout_height="60dp"
+					android:paddingLeft="10dp"
+					android:paddingTop="10dp"
+					android:paddingBottom="10dp"
+					android:background="#6F6F6F"
+					android:orientation="horizontal">
+
+					<TextView
+						android:id="@+id/activity_main_drawer_file_name"
+						android:layout_width="wrap_content"
+						android:layout_height="match_parent"
+						android:paddingLeft="10dp"
+						android:gravity="center_vertical"
+						android:textAppearance="?android:attr/textAppearanceLarge"
+						android:text="@string/drawer_file_title_default"
+						android:textColor="#F6F6F6"/>
+
+				</LinearLayout>
+
+				<ListView
+					android:id="@+id/activity_main_drawer_file_actions"
+					android:layout_width="240dp"
+					android:layout_height="match_parent"
+					android:choiceMode="singleChoice"
+					android:divider="#E0E0E0"
+					android:dividerHeight="1dp"
+					android:background="#F6F6F6"/>
+
+			</LinearLayout>
+
+		</android.support.v4.widget.DrawerLayout>
+		
+	</RelativeLayout>
 	
-	<android.support.v4.view.ViewPager
-		android:id="@+id/activity_main_fragment_container"
+	<TextView
+		android:id="@+id/activity_main_statusbar_tint"
+		android:layout_height="100dp"
 		android:layout_width="match_parent"
-		android:layout_height="match_parent" />
+		android:gravity="top"
+		android:layout_gravity="top"
+		android:background="#000000"/>
 	
-	<LinearLayout
-		android:layout_width="240dp"
-		android:layout_height="match_parent"
-		android:layout_gravity="start"
-		android:orientation="vertical" >
-		
-		<LinearLayout
-			android:layout_width="240dp"
-			android:layout_height="60dp"
-			android:paddingLeft="10dp"
-			android:paddingTop="10dp"
-			android:paddingBottom="10dp"
-			android:background="#6F6F6F"
-			android:orientation="horizontal" >
-			
-			<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="match_parent"
-				android:gravity="center_vertical"
-				android:textAppearance="?android:attr/textAppearanceLarge"
-				android:text="@string/app_name"
-				android:textStyle="bold|italic"
-				android:textColor="#F6F6F6" />
-			
-			<TextView
-				android:id="@+id/activity_main_drawer_version_name"
-				android:layout_width="wrap_content"
-				android:layout_height="match_parent"
-				android:paddingLeft="10dp"
-				android:gravity="center_vertical"
-				android:textAppearance="?android:attr/textAppearanceLarge"
-				android:text="v 0.0.0"
-				android:textColor="#F6F6F6" />
-			
-		</LinearLayout>
-		
-		<ListView
-			android:id="@+id/activity_main_drawer_list"
-			android:layout_width="240dp"
-			android:layout_height="match_parent"
-			android:choiceMode="singleChoice"
-			android:divider="#E0E0E0"
-			android:dividerHeight="1dp"
-			android:background="#F6F6F6" />
-		
-	</LinearLayout>
-	
-	<LinearLayout
-		android:layout_width="240dp"
-		android:layout_height="match_parent"
-		android:layout_gravity="end"
-		android:orientation="vertical" >
+</RelativeLayout>
 
-		<LinearLayout
-			android:layout_width="240dp"
-			android:layout_height="60dp"
-			android:paddingLeft="10dp"
-			android:paddingTop="10dp"
-			android:paddingBottom="10dp"
-			android:background="#6F6F6F"
-			android:orientation="horizontal" >
-
-			<TextView
-				android:id="@+id/activity_main_drawer_file_name"
-				android:layout_width="wrap_content"
-				android:layout_height="match_parent"
-				android:paddingLeft="10dp"
-				android:gravity="center_vertical"
-				android:textAppearance="?android:attr/textAppearanceLarge"
-				android:text="@string/drawer_file_title_default"
-				android:textColor="#F6F6F6" />
-
-		</LinearLayout>
-
-		<ListView
-			android:id="@+id/activity_main_drawer_file_actions"
-			android:layout_width="240dp"
-			android:layout_height="match_parent"
-			android:choiceMode="singleChoice"
-			android:divider="#E0E0E0"
-			android:dividerHeight="1dp"
-			android:background="#F6F6F6" />
-
-	</LinearLayout>
-    
-</android.support.v4.widget.DrawerLayout>

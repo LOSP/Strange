@@ -62,6 +62,12 @@ public class FileFragment extends BaseFragment implements OnItemClickListener
 		
 		loadFiles();
 		
+		// Tint if I'm first
+		MainActivity activity = (MainActivity) getActivity();
+		if (activity.mAdapter.getItemPos(this) == 0) {
+			activity.mAdapter.tintStatus(this);
+		}
+		
 		return view;
 	}
 	
@@ -125,6 +131,8 @@ public class FileFragment extends BaseFragment implements OnItemClickListener
 		mDir = path;
 		mTitle = path;
 
+		((MainActivity) getActivity()).mAdapter.tintStatus(this);
+		
 		MainActivity activity = (MainActivity) getActivity();
 		activity.getFragmentTabsAdapter().renameItem(this);
 		activity.getActionBar().setTitle(mTitle);

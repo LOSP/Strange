@@ -6,18 +6,23 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuInflater;
 import android.view.Gravity;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.ListView;
 import android.widget.ArrayAdapter;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.content.res.Configuration;
+import android.util.TypedValue;
 
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.ViewPager;
+
+import java.lang.reflect.Field;
 
 import us.shandian.strange.R;
 import us.shandian.strange.adapter.FragmentTabsAdapter;
@@ -37,8 +42,11 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 	private TextView mFileName;
 	private ListView mFileActions;
 	
+	// StatusBar Tint
+	private TextView mTint;
+	
 	private ActionBarDrawerToggle mToggle;
-	private FragmentTabsAdapter mAdapter;
+	public FragmentTabsAdapter mAdapter;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -86,9 +94,28 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 		mPager = (ViewPager) findViewById(R.id.activity_main_fragment_container);
 		mAdapter = new FragmentTabsAdapter(getSupportFragmentManager(), getActionBar(), mPager);
 		
+		// Tint SystemBar
+		initTint();
+		
 		// TODO: Replace this with restoring state of last time's
 		mAdapter.addItem(new FileFragment("/sdcard"));
 		mAdapter.addItem(new FileFragment("/"));
+	}
+	
+	private void initTint() {
+		findViewById(R.id.activity_main_container).setPadding(0, getStatusBarHeight() + getActionBarHeight() * 2, 0, 0);
+		
+		// Tint color
+		mTint = (TextView) findViewById(R.id.activity_main_statusbar_tint);
+		mTint.setHeight(getStatusBarHeight());
+	}
+	
+	public void setTintColor(int color) {
+		// Changes the color of ActionBar and StatusBar
+		getActionBar().setBackgroundDrawable(new ColorDrawable(color));
+		getActionBar().setStackedBackgroundDrawable(new ColorDrawable(color));
+		getActionBar().setSplitBackgroundDrawable(new ColorDrawable(color));
+		mTint.setBackgroundColor(color);
 	}
 	
 	protected FragmentTabsAdapter getFragmentTabsAdapter() {
@@ -173,4 +200,32 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 		}
 	}
 	
+	// Get the height of statusbar
+	public int getStatusBarHeight() {
+		Class<?> c = null;
+		Object obj = null;
+		Field field = null;
+		int x = 0, statusBarHeight = 0;
+		try {
+			c = Class.forName("com.android.internal.R$dimen");
+			obj = c.newInstance();
+			field = c.getField("status_bar_height");
+			x = Integer.parseInt(field.get(obj).toString());
+			statusBarHeight = getResources().getDimensionPixelSize(x);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		return statusBarHeight;
+	}
+	
+	// Get the height of ActionBar
+	public int getActionBarHeight() {
+		TypedValue tv = new TypedValue();
+		int actionBarHeight = 0;
+		if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+			actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, getResources().getDisplayMetrics());
+		}
+		
+		return actionBarHeight;
+	}
 }
