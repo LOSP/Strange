@@ -30,6 +30,7 @@ public class FragmentTabsAdapter extends FragmentStatePagerAdapter implements Ta
 		
 		// Initialize
 		mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		mPager.setOffscreenPageLimit(Integer.MAX_VALUE);
 		mPager.setAdapter(this);
 		mPager.setOnPageChangeListener(this);
 	}
