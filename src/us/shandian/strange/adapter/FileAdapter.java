@@ -130,8 +130,14 @@ public class FileAdapter extends BaseAdapter
 		@Override
 		public void run() {
 			FileItem f = mFiles.get(position);
-			ApplicationInfo info = mContext.getPackageManager().getPackageArchiveInfo(f.path, PackageManager.GET_ACTIVITIES)
-										.applicationInfo;
+			ApplicationInfo info;
+			try {
+				info = mContext.getPackageManager().getPackageArchiveInfo(f.path, PackageManager.GET_ACTIVITIES)
+								.applicationInfo;
+			} catch (Exception e) {
+				e.printStackTrace();
+				return;
+			}
 			info.sourceDir = f.path;
 			info.publicSourceDir = f.path;
 			Drawable icon = info.loadIcon(mContext.getPackageManager());
