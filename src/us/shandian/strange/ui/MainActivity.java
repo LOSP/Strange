@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.MenuInflater;
 import android.view.Gravity;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ListView;
 import android.widget.ArrayAdapter;
@@ -41,6 +42,9 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 	private TextView mVersionName;
 	private ViewPager mPager;
 	
+	// Left Drawer
+	private LinearLayout mLeft;
+	
 	// Drawer for file
 	private TextView mFileName;
 	private ListView mFileActions;
@@ -64,8 +68,34 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 		CMDProcessor.exportBusybox(this);
 		
 		// Initialize the drawer
+		mLeft = (LinearLayout) findViewById(R.id.activity_main_drawer_left);
 		mDrawer = (DrawerLayout) findViewById(R.id.activity_main_drawer);
-		mToggle = new ActionBarDrawerToggle(this, mDrawer, R.drawable.ic_drawer, 0, 0);
+		mToggle = new ActionBarDrawerToggle(this, mDrawer, R.drawable.ic_drawer, 0, 0) {
+			
+			// Only allow toggle of left drawer
+			
+			@Override
+			public void onDrawerSlide(View view, float percent) {
+				if (view == mLeft) {
+					super.onDrawerSlide(view, percent);
+				}
+			}
+			
+			@Override
+			public void onDrawerOpened(View view) {
+				if (view == mLeft) {
+					super.onDrawerOpened(view);
+				}
+			}
+			
+			@Override
+			public void onDrawerClosed(View view) {
+				if (view == mLeft) {
+					super.onDrawerClosed(view);
+				}
+			}
+			
+		};
 		
 		mDrawer.setDrawerListener(mToggle);
 		mDrawer.setDrawerShadow(R.drawable.drawer_shadow, Gravity.START);
