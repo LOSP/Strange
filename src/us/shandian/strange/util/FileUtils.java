@@ -7,10 +7,17 @@ import java.util.Comparator;
 import java.util.Collections;
 import java.text.Collator;
 
+import us.shandian.strange.R;
 import us.shandian.strange.type.FileItem;
 
 public class FileUtils
 {
+	enum FileType {
+		FLODER,
+		PACKAGE,
+		UNKNOWN
+	}
+	
 	private File mDir;
 	
 	public FileUtils(String dir) {
@@ -74,5 +81,30 @@ public class FileUtils
 	
 	public String getParent() {
 		return isRoot() ? mDir.getPath() : mDir.getPath().substring(0, mDir.getPath().lastIndexOf("/"));
+	}
+	
+	private static FileType getFileType(FileItem item) {
+		// Get the known file type
+		if (item.isDir) {
+			return FileType.FLODER;
+		} else if (item.name.endsWith(".apk")) {
+			return FileType.PACKAGE;
+		} else {
+			return FileType.UNKNOWN;
+		}
+	}
+	
+	public static Integer[] getFileActions(FileItem item) {
+		// What can we do for this file
+		ArrayList<Integer> ret = new ArrayList<Integer>();
+		FileType type = getFileType(item);
+		if (type == FileType.FLODER) {
+			ret.add(R.string.drawer_file_action_enter);
+		} else if (type == FileType.PACKAGE) {
+			ret.add(R.string.drawer_file_action_install);
+		}
+		ret.add(R.string.drawer_file_action_property);
+		Integer[] array = new Integer[ret.size()];
+		return ret.toArray(array);
 	}
 }

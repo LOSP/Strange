@@ -22,11 +22,14 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.ViewPager;
 
+import java.util.ArrayList;
 import java.lang.reflect.Field;
 
 import us.shandian.strange.R;
 import us.shandian.strange.adapter.FragmentTabsAdapter;
+import us.shandian.strange.type.FileItem;
 import us.shandian.strange.util.CMDProcessor;
+import us.shandian.strange.util.FileUtils;
 
 public class MainActivity extends FragmentActivity implements OnItemClickListener
 {
@@ -44,6 +47,10 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 	
 	// StatusBar Tint
 	private TextView mTint;
+	
+	// Selected file
+	private FileItem mSelected;
+	private Integer[] mSelectedActions;
 	
 	private ActionBarDrawerToggle mToggle;
 	public FragmentTabsAdapter mAdapter;
@@ -200,6 +207,25 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 					break;
 			}
 		}
+	}
+	
+	public void selectFile(FileItem file) {
+		// Select a file
+		mSelected = file;
+		mFileName.setText(mSelected.name);
+		
+		// Get those actions
+		mSelectedActions = FileUtils.getFileActions(mSelected);
+		ArrayList<String> actionNames = new ArrayList<String>();
+		for (Integer action : mSelectedActions) {
+			actionNames.add(getResources().getString(action));
+		}
+		
+		// Set to list
+		mFileActions.setAdapter(new ArrayAdapter<String>(this, R.layout.activity_main_drawer_list_item, actionNames));
+		
+		// Popup
+		mDrawer.openDrawer(Gravity.END);
 	}
 	
 	// Get the height of statusbar

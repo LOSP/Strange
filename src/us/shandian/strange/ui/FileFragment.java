@@ -5,8 +5,9 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.GridView;
-import android.widget.GridView.OnItemClickListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -21,7 +22,7 @@ import us.shandian.strange.type.FileItem;
 import us.shandian.strange.util.FileUtils;
 import us.shandian.strange.util.RootFileUtils;
 
-public class FileFragment extends BaseFragment implements OnItemClickListener
+public class FileFragment extends BaseFragment implements OnItemClickListener, OnItemLongClickListener
 {
 	private String mDir;
 	
@@ -40,6 +41,7 @@ public class FileFragment extends BaseFragment implements OnItemClickListener
 			// This is only for loading thread
 			mGrid.setAdapter(mAdapter);
 			mGrid.setOnItemClickListener(FileFragment.this);
+			mGrid.setOnItemLongClickListener(FileFragment.this);
 			mProgress.setVisibility(View.GONE);
 			mGrid.setVisibility(View.VISIBLE);
 			mLoaderFinished = true;
@@ -125,7 +127,17 @@ public class FileFragment extends BaseFragment implements OnItemClickListener
 		if (f.isDir) {
 			// Switch into a dir
 			goTo(f.path);
+		} else {
+			// Select
+			((MainActivity) getActivity()).selectFile(f);
 		}
+	}
+	
+	@Override
+	public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+		FileItem f = (FileItem) mAdapter.getItem(position);
+		((MainActivity) getActivity()).selectFile(f);
+		return true;
 	}
 	
 	private void goTo(String path) {

@@ -10,5 +10,8 @@
 	
 	<!-- File Drawer -->
 	<string name="drawer_file_title_default">No File Selected</string>
+	<string name="drawer_file_action_enter">Enter</string>
+	<string name="drawer_file_action_install">Install</string>
+	<string name="drawer_file_action_property">Properties</string>
 	
 </resources>

@@ -8,5 +8,8 @@
 
 	<!-- File Drawer -->
 	<string name="drawer_file_title_default">没有选中的文件</string>
+	<string name="drawer_file_action_enter">进入</string>
+	<string name="drawer_file_action_install">安装</string>
+	<string name="drawer_file_action_property">属性</string>
 	
 </resources>
