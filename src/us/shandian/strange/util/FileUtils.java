@@ -7,6 +7,10 @@ import java.util.Comparator;
 import java.util.Collections;
 import java.text.Collator;
 
+import android.content.Intent;
+import android.content.Context;
+import android.net.Uri;
+
 import us.shandian.strange.R;
 import us.shandian.strange.type.FileItem;
 
@@ -106,5 +110,15 @@ public class FileUtils
 		ret.add(R.string.drawer_file_action_property);
 		Integer[] array = new Integer[ret.size()];
 		return ret.toArray(array);
+	}
+	
+	public static void installPackage(Context context, FileItem pkg) {
+		if (getFileType(pkg) != FileType.PACKAGE) return;
+		
+		// Install an apk
+		Intent i = new Intent(Intent.ACTION_VIEW);
+		i.setDataAndType(Uri.fromFile(new File(pkg.path)), "application/vnd.android.package-archive");
+		i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		context.startActivity(i);
 	}
 }

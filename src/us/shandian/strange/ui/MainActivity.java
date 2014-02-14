@@ -118,6 +118,7 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 		// File Drawer
 		mFileName = (TextView) findViewById(R.id.activity_main_drawer_file_name);
 		mFileActions = (ListView) findViewById(R.id.activity_main_drawer_file_actions);
+		mFileActions.setOnItemClickListener(this);
 		
 		// Show "Up" button (Replaced by DrawerLayout)
 		getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -234,6 +235,12 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 						mAdapter.addItem(new FileFragment("/"));
 					}
 					mAdapter.removeItem(mAdapter.getCurrent());
+					break;
+			}
+		} else if (parent == mFileActions) {
+			switch (mSelectedActions[position]) {
+				case R.string.drawer_file_action_install:
+					FileUtils.installPackage(this, mSelected);
 					break;
 			}
 		}
