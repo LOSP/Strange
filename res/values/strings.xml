@@ -14,4 +14,8 @@
 	<string name="drawer_file_action_install">Install</string>
 	<string name="drawer_file_action_property">Properties</string>
 	
+	<!-- Usage Statistics -->
+	<string name="statistics_used">Used</string>
+	<string name="statistics_free">Free</string>
+	
 </resources>

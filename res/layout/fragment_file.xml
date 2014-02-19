@@ -16,12 +16,47 @@
 		android:id="@+id/fragment_file_grid"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
+		android:layout_weight="0.05"
 		android:numColumns="auto_fit"
 		android:verticalSpacing="10dp"
 		android:horizontalSpacing="10dp"
 		android:columnWidth="60dp"
 		android:stretchMode="columnWidth"
 		android:visibility="gone"/>
+
+	<RelativeLayout
+		android:id="@+id/fragment_file_usage"
+		android:layout_height="match_parent"
+		android:layout_width="match_parent"
+		android:layout_weight="0.95"
+		android:visibility="gone">
+		
+		<TextView
+			android:id="@+id/fragment_file_usage_progress"
+			android:layout_height="match_parent"
+			android:layout_width="match_parent"
+			android:layout_gravity="start"
+			android:background="#999999" />
+		
+		<TextView
+			android:id="@+id/fragment_file_usage_used"
+			android:layout_height="match_parent"
+			android:layout_width="wrap_content"
+			android:layout_gravity="start"
+			android:gravity="center_vertical|left"
+			android:textAppearance="?android:attr/textAppearanceMedium"
+			android:textColor="#6F6F6F"/>
+		
+		<TextView
+			android:id="@+id/fragment_file_usage_free"
+			android:layout_height="match_parent"
+			android:layout_width="match_parent"
+			android:layout_gravity="end"
+			android:gravity="center_vertical|right"
+			android:textAppearance="?android:attr/textAppearanceMedium"
+			android:textColor="#6F6F6F"/>
+		
+	</RelativeLayout>
 
 </LinearLayout>
 

@@ -12,4 +12,8 @@
 	<string name="drawer_file_action_install">安装</string>
 	<string name="drawer_file_action_property">属性</string>
 	
+	<!-- Usage Statistics -->
+	<string name="statistics_used">已用</string>
+	<string name="statistics_free">空闲</string>
+	
 </resources>

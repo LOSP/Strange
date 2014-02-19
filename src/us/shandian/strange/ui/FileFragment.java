@@ -3,6 +3,8 @@ package us.shandian.strange.ui;
 import android.view.View;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.RelativeLayout;
 import android.widget.ProgressBar;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -21,14 +23,23 @@ import us.shandian.strange.adapter.FileAdapter;
 import us.shandian.strange.type.FileItem;
 import us.shandian.strange.util.FileUtils;
 import us.shandian.strange.util.RootFileUtils;
+import static us.shandian.strange.BuildConfig.DEBUG;
 
 public class FileFragment extends BaseFragment implements OnItemClickListener, OnItemLongClickListener
 {
+	private static final String TAG = FileFragment.class.getSimpleName();
+	
 	private String mDir;
 	
 	private ProgressBar mProgress;
 	private GridView mGrid;
 	private FileAdapter mAdapter;
+	
+	// Usage statistics
+	private RelativeLayout mUsage;
+	private TextView mUsageProgress;
+	private TextView mUsed;
+	private TextView mFree;
 	
 	private FileUtils mFileUtils;
 	private ArrayList<FileItem> mFiles;
@@ -45,6 +56,9 @@ public class FileFragment extends BaseFragment implements OnItemClickListener, O
 			mProgress.setVisibility(View.GONE);
 			mGrid.setVisibility(View.VISIBLE);
 			mLoaderFinished = true;
+			
+			// Show usage status too
+			initUsageStatistics();
 		}
 	};
 	
@@ -64,6 +78,10 @@ public class FileFragment extends BaseFragment implements OnItemClickListener, O
 		View view = inflater.inflate(R.layout.fragment_file, null);
 		mProgress = (ProgressBar) view.findViewById(R.id.fragment_file_wait);
 		mGrid = (GridView) view.findViewById(R.id.fragment_file_grid);
+		mUsage = (RelativeLayout) view.findViewById(R.id.fragment_file_usage);
+		mUsageProgress = (TextView) view.findViewById(R.id.fragment_file_usage_progress);
+		mUsed = (TextView) view.findViewById(R.id.fragment_file_usage_used);
+		mFree = (TextView) view.findViewById(R.id.fragment_file_usage_free);
 		
 		loadFiles();
 		
@@ -81,9 +99,6 @@ public class FileFragment extends BaseFragment implements OnItemClickListener, O
 		
 		mProgress.setVisibility(View.VISIBLE);
 		mGrid.setVisibility(View.GONE);
-		
-		// Load files
-		mFileUtils = new FileUtils(mDir);
 
 		// Start loading thread
 		new Thread(new Runnable() {
@@ -96,6 +111,9 @@ public class FileFragment extends BaseFragment implements OnItemClickListener, O
 						looperPrepared = true;
 					}
 
+					// Load files
+					mFileUtils = new FileUtils(mDir);
+					
 					// Do some loading
 					try {
 						mFiles = mFileUtils.getFileItems();
@@ -119,6 +137,28 @@ public class FileFragment extends BaseFragment implements OnItemClickListener, O
 					Looper.loop();
 				}
 			}).start();
+	}
+	
+	private void initUsageStatistics() {
+		// Load usage statistics
+		if (mFileUtils.getUsedPercentage() != -1) {
+			// Statistics are available
+			if (DEBUG) {
+				android.util.Log.d(TAG, "Usage statistics available for " + mDir);
+				android.util.Log.d(TAG, "Used = " + mFileUtils.getUsed() + " Free = " + mFileUtils.getFree() + " Percentage = " + mFileUtils.getUsedPercentage());
+			}
+			
+			mUsage.setVisibility(View.VISIBLE);
+			
+			// Calculate percentage to with
+			mUsageProgress.setTranslationX(- new Float(getActivity().getWindowManager().getDefaultDisplay().getWidth() * (1 - mFileUtils.getUsedPercentage() / 100.0f)).intValue());
+			
+			// Display as text
+			mUsed.setText(getActivity().getResources().getString(R.string.statistics_used) + " " + mFileUtils.getUsed());
+			mFree.setText(mFileUtils.getFree() + " " + getActivity().getResources().getString(R.string.statistics_free));
+		} else {
+			mUsage.setVisibility(View.GONE);
+		}
 	}
 	
 	@Override

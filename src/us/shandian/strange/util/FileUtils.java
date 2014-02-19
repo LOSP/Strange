@@ -2,6 +2,8 @@ package us.shandian.strange.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StringReader;
+import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Collections;
@@ -13,6 +15,7 @@ import android.net.Uri;
 
 import us.shandian.strange.R;
 import us.shandian.strange.type.FileItem;
+import static us.shandian.strange.BuildConfig.DEBUG;
 
 public class FileUtils
 {
@@ -22,10 +25,23 @@ public class FileUtils
 		UNKNOWN
 	}
 	
+	private static final String TAG = FileUtils.class.getSimpleName();
+	
 	private File mDir;
+	
+	// Usage statistics
+	private int mUsedPercentage = -1;
+	private String mUsed = ""; // Human-readable string (df -h)
+	private String mFree = "";
 	
 	public FileUtils(String dir) {
 		mDir = new File(dir);
+		
+		try {
+			getUsageStatistics();
+		} catch (IOException e) {
+			// So what?
+		}
 	}
 	
 	public ArrayList<FileItem> getFileItems() {
@@ -85,6 +101,85 @@ public class FileUtils
 	
 	public String getParent() {
 		return isRoot() ? mDir.getPath() : mDir.getPath().substring(0, mDir.getPath().lastIndexOf("/"));
+	}
+	
+	public int getUsedPercentage() {
+		return mUsedPercentage;
+	}
+	
+	public String getUsed() {
+		return mUsed;
+	}
+	
+	public String getFree() {
+		return mFree;
+	}
+	
+	private void getUsageStatistics() throws IOException {
+		// Real path
+		String path = mDir.getCanonicalPath();
+		if (DEBUG) {
+			android.util.Log.d(TAG, "CanonicalPath = " + path);
+		}
+		
+		// Ask shell for those data
+		String shell = new CMDProcessor().sh.runWaitFor("busybox df -h").stdout;
+		
+		// A lot to process
+		BufferedReader r = new BufferedReader(new StringReader(shell));
+		
+		String line = r.readLine();
+		
+		while (line != null) {
+			// Read line by line, be patient
+			String[] items = line.split(" ");
+			if (items.length == 1) {
+				line = line + " " + r.readLine();
+				items = line.split(" ");
+			}
+			int itemNum = 0;
+			String tmpUsed = "";
+			String tmpFree = "";
+			String tmpPercentage = "";
+			String tmpPath = "";
+			for (String item : items) {
+				if (!item.trim().equals("")) {
+					if (DEBUG) {
+						android.util.Log.d("Strange", "item = " + item + " num = " + itemNum);
+					}
+					
+					switch (itemNum) {
+						case 2:
+							tmpUsed = item;
+							break;
+						case 3:
+							tmpFree = item;
+							break;
+						case 4:
+							tmpPercentage = item;
+							break;
+						case 5:
+							tmpPath = item;
+							break;
+					}
+					
+					itemNum++;
+				}
+			}
+			
+			if (!tmpPath.trim().equals("") && path.startsWith(tmpPath)) {
+				// Finally I found you
+				if (DEBUG) {
+					android.util.Log.d(TAG, "percent = " + tmpPercentage);
+				}
+				mUsed = tmpUsed;
+				mFree = tmpFree;
+				mUsedPercentage = Integer.parseInt(tmpPercentage.replace("%", ""));
+				break;
+			}
+			
+			line = r.readLine();
+		}
 	}
 	
 	private static FileType getFileType(FileItem item) {
