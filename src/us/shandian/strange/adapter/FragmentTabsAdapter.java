@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 import us.shandian.strange.ui.BaseFragment;
 import us.shandian.strange.ui.MainActivity;
+import static us.shandian.strange.BuildConfig.DEBUG;
 
 public class FragmentTabsAdapter extends FragmentStatePagerAdapter implements TabListener, OnPageChangeListener
 {
@@ -155,6 +156,9 @@ public class FragmentTabsAdapter extends FragmentStatePagerAdapter implements Ta
 		int tintColor = activity.getResources().getColor(COLORS[id]);
 		activity.setTintColor(tintColor);
 		fragment.onTint(tintColor);
-		android.util.Log.d("Strange", "newTitle = " + fragment.getPageTitle());
+		
+		if (DEBUG) {
+			android.util.Log.d("Strange", "newTitle = " + fragment.getPageTitle());
+		}
 	}
 }
