@@ -213,13 +213,13 @@ public class FileFragment extends BaseFragment implements OnItemClickListener, O
 
 		mDir = path;
 		mTitle = path;
-
-		((MainActivity) getActivity()).mAdapter.tintStatus(this);
 		
 		MainActivity activity = (MainActivity) getActivity();
 		activity.getFragmentTabsAdapter().renameItem(this);
 		activity.getActionBar().setTitle(mTitle);
 
+		activity.mAdapter.tintStatus(this);
+		
 		loadFiles();
 	}
 	
