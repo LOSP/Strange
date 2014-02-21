@@ -229,6 +229,10 @@ public class PullToRefreshLayout extends FrameLayout {
         }
     }
 
+    public PullToRefreshAttacher getPullToRefreshAttacher() {
+        return mPullToRefreshAttacher;
+    }
+
     static class LayoutParams extends FrameLayout.LayoutParams {
         private final String mViewDelegateClassName;
 

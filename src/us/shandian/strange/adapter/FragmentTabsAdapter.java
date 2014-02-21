@@ -154,6 +154,7 @@ public class FragmentTabsAdapter extends FragmentStatePagerAdapter implements Ta
 		}
 		int tintColor = activity.getResources().getColor(COLORS[id]);
 		activity.setTintColor(tintColor);
+		fragment.onTint(tintColor);
 		android.util.Log.d("Strange", "newTitle = " + fragment.getPageTitle());
 	}
 }

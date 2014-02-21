@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.GridView;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -27,6 +28,7 @@ import static us.shandian.strange.BuildConfig.DEBUG;
 
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 
 public class FileFragment extends BaseFragment implements OnItemClickListener, OnItemLongClickListener, OnRefreshListener
@@ -101,7 +103,6 @@ public class FileFragment extends BaseFragment implements OnItemClickListener, O
 								.theseChildrenArePullable(new View[] {mGrid})
 								.listener(this)
 								.setup(mPullToRefresh);
-		
 		
 		loadFiles();
 		
@@ -230,6 +231,22 @@ public class FileFragment extends BaseFragment implements OnItemClickListener, O
 			} else {
 				getActivity().finish();
 			}
+		}
+	}
+	
+	@Override
+	public void onTint(int tintColor) {
+		// Tint the header view
+		PullToRefreshAttacher attacher = mPullToRefresh.getPullToRefreshAttacher();
+		if (attacher != null) {
+			if (DEBUG) {
+				android.util.Log.d(TAG, "Tinting Pull To Refresh");
+			}
+			
+			// Set background
+			attacher.getHeaderView()
+					.findViewById(uk.co.senab.actionbarpulltorefresh.library.R.id.ptr_content)
+					.setBackgroundDrawable(new ColorDrawable(tintColor));
 		}
 	}
 }

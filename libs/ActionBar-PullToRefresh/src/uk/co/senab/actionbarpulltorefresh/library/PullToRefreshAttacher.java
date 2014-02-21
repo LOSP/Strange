@@ -247,7 +247,7 @@ public class PullToRefreshAttacher {
      * @return The Header View which is displayed when the user is pulling, or
      *         we are refreshing.
      */
-    final View getHeaderView() {
+    public final View getHeaderView() {
         return mHeaderView;
     }
 

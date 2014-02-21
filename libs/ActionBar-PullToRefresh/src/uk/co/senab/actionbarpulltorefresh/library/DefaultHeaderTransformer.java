@@ -298,10 +298,11 @@ public class DefaultHeaderTransformer extends HeaderTransformer {
         }
 
         // Retrieve the Action Bar background from the app theme or the Action Bar's style (see #93)
+        // Except when the background is set
         Drawable bg = styleAttrs.hasValue(R.styleable.PullToRefreshHeader_ptrHeaderBackground)
                 ? styleAttrs.getDrawable(R.styleable.PullToRefreshHeader_ptrHeaderBackground)
                 : getActionBarBackground(activity);
-        if (bg != null) {
+        if (bg != null && mContentLayout.getBackground() == null) {
             mHeaderTextView.setBackgroundDrawable(bg);
 
             // If we have an opaque background we can remove the background from the content layout

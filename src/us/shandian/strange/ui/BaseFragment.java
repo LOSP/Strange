@@ -13,4 +13,8 @@ public class BaseFragment extends Fragment
 	public void goBack() {
 		// Do nothing by default
 	}
+	
+	public void onTint(int tintColor) {
+		// Do nothing by default
+	}
 }
