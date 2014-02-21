@@ -25,7 +25,11 @@ import us.shandian.strange.util.FileUtils;
 import us.shandian.strange.util.RootFileUtils;
 import static us.shandian.strange.BuildConfig.DEBUG;
 
-public class FileFragment extends BaseFragment implements OnItemClickListener, OnItemLongClickListener
+import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
+import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
+
+public class FileFragment extends BaseFragment implements OnItemClickListener, OnItemLongClickListener, OnRefreshListener
 {
 	private static final String TAG = FileFragment.class.getSimpleName();
 	
@@ -44,6 +48,9 @@ public class FileFragment extends BaseFragment implements OnItemClickListener, O
 	private FileUtils mFileUtils;
 	private ArrayList<FileItem> mFiles;
 	
+	// Pull To Refresh
+	private PullToRefreshLayout mPullToRefresh;
+	
 	private boolean mLoaderFinished = true;
 	
 	private Handler mHandler = new Handler() {
@@ -59,6 +66,9 @@ public class FileFragment extends BaseFragment implements OnItemClickListener, O
 			
 			// Show usage status too
 			initUsageStatistics();
+			
+			// Refresh finish
+			mPullToRefresh.setRefreshComplete();
 		}
 	};
 	
@@ -82,6 +92,16 @@ public class FileFragment extends BaseFragment implements OnItemClickListener, O
 		mUsageProgress = (TextView) view.findViewById(R.id.fragment_file_usage_progress);
 		mUsed = (TextView) view.findViewById(R.id.fragment_file_usage_used);
 		mFree = (TextView) view.findViewById(R.id.fragment_file_usage_free);
+		
+		// Pull To Refresh
+		mPullToRefresh = new PullToRefreshLayout(mGrid.getContext());
+
+		ActionBarPullToRefresh.from(getActivity())
+								.insertLayoutInto((ViewGroup) view.findViewById(R.id.fragment_file_grid_container))
+								.theseChildrenArePullable(new View[] {mGrid})
+								.listener(this)
+								.setup(mPullToRefresh);
+		
 		
 		loadFiles();
 		
@@ -178,6 +198,11 @@ public class FileFragment extends BaseFragment implements OnItemClickListener, O
 		FileItem f = (FileItem) mAdapter.getItem(position);
 		((MainActivity) getActivity()).selectFile(f);
 		return true;
+	}
+	
+	@Override
+	public void onRefreshStarted(View view) {
+		loadFiles();
 	}
 	
 	private void goTo(String path) {
