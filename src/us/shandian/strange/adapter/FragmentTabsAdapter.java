@@ -10,6 +10,7 @@ import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.ActionBar.TabListener;
 import android.app.FragmentTransaction;
+import android.os.AsyncTask;
 
 import java.util.ArrayList;
 
@@ -156,6 +157,22 @@ public class FragmentTabsAdapter extends FragmentStatePagerAdapter implements Ta
 		int tintColor = activity.getResources().getColor(COLORS[id]);
 		activity.setTintColor(tintColor);
 		fragment.onTint(tintColor);
+		
+		// Call all of them
+		new AsyncTask<Integer, Void, Void>() {
+			@Override
+			public Void doInBackground(Integer ... params){
+				for (BaseFragment f : mFragments) {
+					try {
+						f.onTint(params[0]);
+					} catch (NullPointerException e) {
+						// Something might be null when running
+						// Just avoid it and let it go
+					}
+				}
+				return null;
+			}
+		}.execute(tintColor);
 		
 		if (DEBUG) {
 			android.util.Log.d("Strange", "newTitle = " + fragment.getPageTitle());

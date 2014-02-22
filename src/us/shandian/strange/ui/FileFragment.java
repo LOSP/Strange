@@ -244,9 +244,25 @@ public class FileFragment extends BaseFragment implements OnItemClickListener, O
 			}
 			
 			// Set background
-			attacher.getHeaderView()
-					.findViewById(uk.co.senab.actionbarpulltorefresh.library.R.id.ptr_content)
-					.setBackgroundDrawable(new ColorDrawable(tintColor));
+			View v = attacher.getHeaderView()
+					.findViewById(uk.co.senab.actionbarpulltorefresh.library.R.id.ptr_content);
+			
+			v.post(new HeaderViewTinter(v, tintColor));
+		}
+	}
+	
+	private class HeaderViewTinter implements Runnable {
+		private View mView;
+		private int mTintColor;
+		
+		public HeaderViewTinter(View view, int tintColor) {
+			mView = view;
+			mTintColor = tintColor;
+		}
+		
+		@Override
+		public void run() {
+			mView.setBackgroundDrawable(new ColorDrawable(mTintColor));
 		}
 	}
 }
