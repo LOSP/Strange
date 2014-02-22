@@ -591,7 +591,11 @@ public class PullToRefreshAttacher {
 
     protected void addHeaderViewToActivity(View headerView) {
         // Get the Display Rect of the Decor View
-        mActivity.getWindow().getDecorView().getWindowVisibleDisplayFrame(mRect);
+        try {
+            mActivity.getWindow().getDecorView().getWindowVisibleDisplayFrame(mRect);
+        } catch (NullPointerException e) {
+            // Something might be null sometimes, just avoid it
+        }
 
         // Honour the requested layout params
         int width = WindowManager.LayoutParams.MATCH_PARENT;
