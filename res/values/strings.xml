@@ -13,9 +13,13 @@
 	<string name="drawer_file_action_enter">Enter</string>
 	<string name="drawer_file_action_install">Install</string>
 	<string name="drawer_file_action_property">Properties</string>
+	<string name="drawer_file_action_delete">Delete</string>
 	
 	<!-- Usage Statistics -->
 	<string name="statistics_used">Used</string>
 	<string name="statistics_free">Free</string>
+	
+	<!-- Messages -->
+	<string name="msg_wait">Please wait...</string>
 	
 </resources>

@@ -11,9 +11,13 @@
 	<string name="drawer_file_action_enter">进入</string>
 	<string name="drawer_file_action_install">安装</string>
 	<string name="drawer_file_action_property">属性</string>
+	<string name="drawer_file_action_delete">删除</string>
 	
 	<!-- Usage Statistics -->
 	<string name="statistics_used">已用</string>
 	<string name="statistics_free">空闲</string>
+	
+	<!-- Messages -->
+	<string name="msg_wait">请稍候...</string>
 	
 </resources>

@@ -202,6 +202,7 @@ public class FileUtils
 		} else if (type == FileType.PACKAGE) {
 			ret.add(R.string.drawer_file_action_install);
 		}
+		ret.add(R.string.drawer_file_action_delete);
 		ret.add(R.string.drawer_file_action_property);
 		Integer[] array = new Integer[ret.size()];
 		return ret.toArray(array);
@@ -215,5 +216,18 @@ public class FileUtils
 		i.setDataAndType(Uri.fromFile(new File(pkg.path)), "application/vnd.android.package-archive");
 		i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		context.startActivity(i);
+	}
+	
+	public void delete(FileItem file) {
+		new CMDProcessor().sh.runWaitFor(generateDeleteCmd(file));
+	}
+	
+	protected String generateDeleteCmd(FileItem file) {
+		String cmd = "busybox rm -r";
+		if (file.isDir) {
+			cmd += "f";
+		}
+		cmd += " " + file.path;
+		return cmd;
 	}
 }

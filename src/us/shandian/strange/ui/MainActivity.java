@@ -1,6 +1,7 @@
 package us.shandian.strange.ui;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +16,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.content.res.Configuration;
 import android.util.TypedValue;
 
@@ -54,7 +57,19 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 	
 	// Selected file
 	private FileItem mSelected;
+	private FileUtils mSelectedUtils;
 	private Integer[] mSelectedActions;
+	
+	// Tasks
+	private ProgressDialog mProgress;
+	private Handler mHandler = new Handler() {
+
+		@Override
+		public void handleMessage(Message msg) {
+			mProgress.dismiss();
+			allReload();
+		}
+	};
 	
 	private ActionBarDrawerToggle mToggle;
 	public FragmentTabsAdapter mAdapter;
@@ -66,6 +81,12 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 		
 		// Output busybox
 		CMDProcessor.exportBusybox(this);
+		
+		// The "Please wait" dialog
+		mProgress = new ProgressDialog(this);
+		mProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+		mProgress.setMessage(getResources().getString(R.string.msg_wait));
+		mProgress.setCancelable(false);
 		
 		// Initialize the drawer
 		mLeft = (LinearLayout) findViewById(R.id.activity_main_drawer_left);
@@ -242,13 +263,27 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 				case R.string.drawer_file_action_install:
 					FileUtils.installPackage(this, mSelected);
 					break;
+				case R.string.drawer_file_action_delete:
+					// Run commands in FileUtils to delete
+					// TODO Show alert if the path is not remounted to rw
+					mDrawer.closeDrawer(Gravity.END);
+					mProgress.show();
+					new Thread(new Runnable() {
+						@Override
+						public void run() {
+							mSelectedUtils.delete(mSelected);
+							mHandler.sendEmptyMessage(0);
+						}
+					}).start();
+					break;
 			}
 		}
 	}
 	
-	public void selectFile(FileItem file) {
+	public void selectFile(FileItem file, FileUtils utils) {
 		// Select a file
 		mSelected = file;
+		mSelectedUtils = utils;
 		mFileName.setText(mSelected.name);
 		
 		// Get those actions
@@ -263,6 +298,15 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 		
 		// Popup
 		mDrawer.openDrawer(Gravity.END);
+	}
+	
+	private void allReload() {
+		for (int i = 0; i < mAdapter.getCount(); i++) {
+			BaseFragment f = mAdapter.getItem(i);
+			if (f instanceof FileFragment) {
+				((FileFragment) f).loadFiles();
+			}
+		}
 	}
 	
 	// Get the height of statusbar

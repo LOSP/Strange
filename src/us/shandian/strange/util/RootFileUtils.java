@@ -62,4 +62,9 @@ public class RootFileUtils extends FileUtils
 		
 		return ret;
 	}
+
+	@Override
+	public void delete(FileItem file) {
+		new CMDProcessor().su.runWaitFor(generateDeleteCmd(file));
+	}
 }

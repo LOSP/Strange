@@ -115,7 +115,7 @@ public class FileFragment extends BaseFragment implements OnItemClickListener, O
 		return view;
 	}
 	
-	private void loadFiles() {
+	public void loadFiles() {
 		mLoaderFinished = false;
 		
 		mProgress.setVisibility(View.VISIBLE);
@@ -190,14 +190,14 @@ public class FileFragment extends BaseFragment implements OnItemClickListener, O
 			goTo(f.path);
 		} else {
 			// Select
-			((MainActivity) getActivity()).selectFile(f);
+			((MainActivity) getActivity()).selectFile(f, mFileUtils);
 		}
 	}
 	
 	@Override
 	public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 		FileItem f = (FileItem) mAdapter.getItem(position);
-		((MainActivity) getActivity()).selectFile(f);
+		((MainActivity) getActivity()).selectFile(f, mFileUtils);
 		return true;
 	}
 	
