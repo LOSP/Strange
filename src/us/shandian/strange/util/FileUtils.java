@@ -34,11 +34,15 @@ public class FileUtils
 	private String mUsed = ""; // Human-readable string (df -h)
 	private String mFree = "";
 	
+	// Writability
+	private boolean mCanWrite = false;
+	
 	public FileUtils(String dir) {
 		mDir = new File(dir);
 		
 		try {
 			getUsageStatistics();
+			mCanWrite = getWritablity();
 		} catch (IOException e) {
 			// So what?
 		}
@@ -180,6 +184,61 @@ public class FileUtils
 			
 			line = r.readLine();
 		}
+	}
+	
+	private boolean getWritablity() throws IOException {
+		// Return value
+		boolean canWrite = false;
+		
+		// Real path
+		String path = mDir.getCanonicalPath();
+		if (DEBUG) {
+			android.util.Log.d(TAG, "CanonicalPath = " + path);
+		}
+
+		// Ask shell for mounts data
+		String shell = new CMDProcessor().sh.runWaitFor("busybox mount").stdout;
+
+		// A lot to process
+		BufferedReader r = new BufferedReader(new StringReader(shell));
+
+		String line = r.readLine();
+
+		while (line != null) {
+			// Split to items
+			String items[] = line.split(" ");
+			
+			// Try to find
+			// Terminal output is like this:
+			// DEVICE on MOUNT_POINT type TYPE (FLAGS)
+			if (path.startsWith(items[2])) {
+				// Found it
+				String flag = items[5];
+				flag = flag.replace("(", "").replace(")", "");
+				
+				if (DEBUG) {
+					android.util.Log.d(TAG, "Flags: " + flag);
+				}
+				
+				// Split to flag items
+				String flags[] = flag.split(",");
+				for (String flagItem : flags) {
+					if (flagItem.equals("rw")) {
+						canWrite = true;
+					} else if (flagItem.equals("ro")) {
+						canWrite = false;
+					}
+				}
+			}
+			
+			line = r.readLine();
+		}
+		
+		return canWrite;
+	}
+	
+	public boolean canWrite() {
+		return mCanWrite;
 	}
 	
 	private static FileType getFileType(FileItem item) {

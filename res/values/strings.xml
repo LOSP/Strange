@@ -19,6 +19,10 @@
 	<string name="statistics_used">Used</string>
 	<string name="statistics_free">Free</string>
 	
+	<!-- Writablity -->
+	<string name="writablity_rw">Read &amp; Write</string>
+	<string name="writablity_ro">Read Only</string>
+	
 	<!-- Messages -->
 	<string name="msg_wait">Please wait...</string>
 	

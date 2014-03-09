@@ -46,6 +46,7 @@ public class FileFragment extends BaseFragment implements OnItemClickListener, O
 	private TextView mUsageProgress;
 	private TextView mUsed;
 	private TextView mFree;
+	private TextView mWritablity;
 	
 	private FileUtils mFileUtils;
 	private ArrayList<FileItem> mFiles;
@@ -94,6 +95,7 @@ public class FileFragment extends BaseFragment implements OnItemClickListener, O
 		mUsageProgress = (TextView) view.findViewById(R.id.fragment_file_usage_progress);
 		mUsed = (TextView) view.findViewById(R.id.fragment_file_usage_used);
 		mFree = (TextView) view.findViewById(R.id.fragment_file_usage_free);
+		mWritablity = (TextView) view.findViewById(R.id.fragment_file_usage_writablity);
 		
 		// Pull To Refresh
 		mPullToRefresh = new PullToRefreshLayout(mGrid.getContext());
@@ -179,6 +181,17 @@ public class FileFragment extends BaseFragment implements OnItemClickListener, O
 			mFree.setText(mFileUtils.getFree() + " " + getActivity().getResources().getString(R.string.statistics_free));
 		} else {
 			mUsage.setVisibility(View.GONE);
+		}
+		
+		// Writablity
+		// Though usage statistics may not available,
+		// We still get the readablity.
+		// Even if it cannot be seen,
+		// It can still be used for the left menu
+		if (mFileUtils.canWrite()) {
+			mWritablity.setText(R.string.writablity_rw);
+		} else {
+			mWritablity.setText(R.string.writablity_ro);
 		}
 	}
 	

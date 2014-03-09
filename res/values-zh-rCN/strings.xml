@@ -17,6 +17,10 @@
 	<string name="statistics_used">已用</string>
 	<string name="statistics_free">空闲</string>
 	
+	<!-- Writablity -->
+	<string name="writablity_rw">读 &amp; 写</string>
+	<string name="writablity_ro">只读</string>
+	
 	<!-- Messages -->
 	<string name="msg_wait">请稍候...</string>
 	
