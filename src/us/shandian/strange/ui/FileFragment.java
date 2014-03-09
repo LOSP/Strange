@@ -21,6 +21,7 @@ import java.lang.NullPointerException;
 
 import us.shandian.strange.R;
 import us.shandian.strange.adapter.FileAdapter;
+import us.shandian.strange.adapter.FragmentTabsAdapter;
 import us.shandian.strange.type.FileItem;
 import us.shandian.strange.util.FileUtils;
 import us.shandian.strange.util.RootFileUtils;
@@ -60,6 +61,11 @@ public class FileFragment extends BaseFragment implements OnItemClickListener, O
 		@Override
 		public void handleMessage(Message msg) {
 			// This is only for loading thread
+			FragmentTabsAdapter adapter = ((MainActivity) getActivity()).mAdapter;
+			if (adapter.getItemPos(FileFragment.this) == adapter.getCurrent()) {
+				onActivate();
+			}
+			
 			mGrid.setAdapter(mAdapter);
 			mGrid.setOnItemClickListener(FileFragment.this);
 			mGrid.setOnItemLongClickListener(FileFragment.this);
@@ -142,6 +148,12 @@ public class FileFragment extends BaseFragment implements OnItemClickListener, O
 						mFiles = mFileUtils.getFileItems();
 					} catch (NullPointerException e) {
 						// Permission denied, use root
+						mFileUtils = new RootFileUtils(mDir);
+						mFiles = mFileUtils.getFileItems();
+					}
+					
+					// If not writable, try root
+					if (!(mFileUtils instanceof RootFileUtils) && !mFileUtils.canWrite()) {
 						mFileUtils = new RootFileUtils(mDir);
 						mFiles = mFileUtils.getFileItems();
 					}
@@ -262,6 +274,38 @@ public class FileFragment extends BaseFragment implements OnItemClickListener, O
 			
 			v.post(new HeaderViewTinter(v, tintColor));
 		}
+	}
+	
+	@Override
+	public void onActivate() {
+		if (getActivity() == null) return;
+		
+		if (DEBUG) {
+			android.util.Log.d(TAG, "onActivate");
+		}
+		
+		onActivate((MainActivity) getActivity());
+	}
+	
+	public void onActivate(MainActivity activity) {
+		if (mFileUtils instanceof RootFileUtils) {
+			activity.setWritablity(mFileUtils.canWrite());
+		} else {
+			activity.disableRemount();
+		}
+	}
+	
+	public void remount() {
+		if (DEBUG) {
+			android.util.Log.d(TAG, "beginning remount");
+		}
+		
+		// We can only remount with root
+		if (!(mFileUtils instanceof RootFileUtils)) {
+			return;
+		}
+		mFileUtils.remount(!mFileUtils.canWrite());
+		initUsageStatistics();
 	}
 	
 	private class HeaderViewTinter implements Runnable {

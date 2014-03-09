@@ -39,6 +39,7 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 {
 	private static final int DRAWER_MAIN_NEW = 0;
 	private static final int DRAWER_MAIN_CLOSE = 1;
+	private static final int DRAWER_MAIN_REMOUNT = 2;
 	
 	private DrawerLayout mDrawer;
 	private ListView mDrawerList;
@@ -257,6 +258,15 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 					}
 					mAdapter.removeItem(mAdapter.getCurrent());
 					break;
+				case DRAWER_MAIN_REMOUNT:
+					BaseFragment f = mAdapter.getItem(mAdapter.getCurrent());
+					if (f instanceof FileFragment) {
+						((FileFragment) f).remount();
+						f.onActivate();
+						mDrawer.closeDrawer(Gravity.START);
+					}
+					break;
+					
 			}
 		} else if (parent == mFileActions) {
 			switch (mSelectedActions[position]) {
@@ -298,6 +308,24 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 		
 		// Popup
 		mDrawer.openDrawer(Gravity.END);
+	}
+	
+	public void setWritablity(boolean rw) {
+		TextView remount = (TextView) mDrawerList.getChildAt(DRAWER_MAIN_REMOUNT);
+		if (rw) {
+			remount.setText(getResources().getString(R.string.drawer_remount) + " " +
+							getResources().getString(R.string.writablity_ro));
+		} else {
+			remount.setText(getResources().getString(R.string.drawer_remount) + " " +
+							getResources().getString(R.string.writablity_rw));
+		}
+	}
+	
+	public void disableRemount() {
+		TextView remount = (TextView) mDrawerList.getChildAt(DRAWER_MAIN_REMOUNT);
+		
+		remount.setText(getResources().getString(R.string.drawer_remount) + 
+						getResources().getString(R.string.drawer_remount_none));
 	}
 	
 	private void allReload() {

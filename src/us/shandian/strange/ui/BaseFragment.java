@@ -17,4 +17,8 @@ public class BaseFragment extends Fragment
 	public void onTint(int tintColor) {
 		// Do nothing by default
 	}
+	
+	public void onActivate() {
+		
+	}
 }

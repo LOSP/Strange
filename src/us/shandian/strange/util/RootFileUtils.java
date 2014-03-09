@@ -6,10 +6,13 @@ import java.util.Collections;
 import java.text.Collator;
 
 import us.shandian.strange.type.FileItem;
+import static us.shandian.strange.BuildConfig.DEBUG;
 
 public class RootFileUtils extends FileUtils
 {
 	// This class plays the role of FileUtils, but has root permission
+	private static final String TAG = RootFileUtils.class.getSimpleName();
+	
 	private String mDirPath;
 	
 	public RootFileUtils(String dir) {
@@ -66,5 +69,19 @@ public class RootFileUtils extends FileUtils
 	@Override
 	public void delete(FileItem file) {
 		new CMDProcessor().su.runWaitFor(generateDeleteCmd(file));
+	}
+
+	@Override
+	protected String getMountTable() {
+		return new CMDProcessor().su.runWaitFor("busybox mount").stdout;
+	}
+
+	@Override
+	public void remount(boolean rw) {
+		if (DEBUG) {
+			android.util.Log.d(TAG, "remount cmd : " + "busybox mount -o remount" + (rw ? " rw" : ",ro") + " " + mRemountPoint);
+		}
+		new CMDProcessor().su.runWaitFor("busybox mount -o remount" + (rw ? " rw" : ",ro") + " " + mRemountPoint);
+		reloadWritablity();
 	}
 }

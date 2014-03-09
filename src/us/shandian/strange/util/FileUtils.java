@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Collections;
 import java.text.Collator;
+import java.lang.UnsupportedOperationException;
 
 import android.content.Intent;
 import android.content.Context;
@@ -36,6 +37,7 @@ public class FileUtils
 	
 	// Writability
 	private boolean mCanWrite = false;
+	protected String mRemountPoint = "";
 	
 	public FileUtils(String dir) {
 		mDir = new File(dir);
@@ -197,7 +199,7 @@ public class FileUtils
 		}
 
 		// Ask shell for mounts data
-		String shell = new CMDProcessor().sh.runWaitFor("busybox mount").stdout;
+		String shell = getMountTable();
 
 		// A lot to process
 		BufferedReader r = new BufferedReader(new StringReader(shell));
@@ -212,6 +214,9 @@ public class FileUtils
 			// Terminal output is like this:
 			// DEVICE on MOUNT_POINT type TYPE (FLAGS)
 			if (path.startsWith(items[2])) {
+				// Mount point
+				mRemountPoint = items[2];
+				
 				// Found it
 				String flag = items[5];
 				flag = flag.replace("(", "").replace(")", "");
@@ -237,8 +242,24 @@ public class FileUtils
 		return canWrite;
 	}
 	
+	protected String getMountTable() {
+		return new CMDProcessor().sh.runWaitFor("busybox mount").stdout;
+	}
+	
 	public boolean canWrite() {
 		return mCanWrite;
+	}
+	
+	public void remount(boolean rw) {
+		throw new UnsupportedOperationException("Cannot remount without root");
+	}
+	
+	protected void reloadWritablity() {
+		try {
+			mCanWrite = getWritablity();
+		} catch (IOException e) {
+			// Nothing
+		}
 	}
 	
 	private static FileType getFileType(FileItem item) {

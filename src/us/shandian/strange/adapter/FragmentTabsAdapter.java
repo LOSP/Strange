@@ -113,6 +113,7 @@ public class FragmentTabsAdapter extends FragmentStatePagerAdapter implements Ta
 	public void onPageSelected(int position) {
 		mActionBar.setSelectedNavigationItem(position);
 		mActionBar.setTitle(mFragments.get(position).getPageTitle());
+		mFragments.get(position).onActivate();
 		tintStatus(mFragments.get(position));
 	}
 
@@ -126,6 +127,7 @@ public class FragmentTabsAdapter extends FragmentStatePagerAdapter implements Ta
 	{
 		mActionBar.setTitle(mFragments.get(tab.getPosition()).getPageTitle());
 		mPager.setCurrentItem(tab.getPosition());
+		mFragments.get(tab.getPosition()).onActivate();
 		tintStatus(mFragments.get(tab.getPosition()));
 	}
 
