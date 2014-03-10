@@ -2,6 +2,7 @@ package us.shandian.strange.ui;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.app.AlertDialog;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +19,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.util.TypedValue;
 
@@ -274,10 +276,15 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 					FileUtils.installPackage(this, mSelected);
 					break;
 				case R.string.drawer_file_action_delete:
-					// Run commands in FileUtils to delete
-					// TODO Show alert if the path is not remounted to rw
 					mDrawer.closeDrawer(Gravity.END);
+					// Show alert if the path is not remounted to rw
+					if (!mSelectedUtils.canWrite()) {
+						alertRemount();
+						break;
+					}
+					
 					mProgress.show();
+					// Run commands in FileUtils to delete
 					new Thread(new Runnable() {
 						@Override
 						public void run() {
@@ -335,6 +342,22 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 				((FileFragment) f).loadFiles();
 			}
 		}
+	}
+	
+	private void alertRemount() {
+		// Alert to remount
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setNegativeButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int id) {
+					dialog.cancel();
+				}
+		});
+		builder.setMessage(R.string.msg_remount);
+		builder.create().show();
+		
+		// Open left drawer to remind the user
+		mDrawer.openDrawer(Gravity.START);
 	}
 	
 	// Get the height of statusbar

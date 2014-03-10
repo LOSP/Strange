@@ -25,5 +25,6 @@
 	
 	<!-- Messages -->
 	<string name="msg_wait">请稍候...</string>
+	<string name="msg_remount">此目录不可写，您需要将此目录重挂载为读写后执行此操作。</string>
 	
 </resources>
