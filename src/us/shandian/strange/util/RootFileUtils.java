@@ -1,9 +1,6 @@
 package us.shandian.strange.util;
 
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Collections;
-import java.text.Collator;
 
 import us.shandian.strange.type.FileItem;
 import static us.shandian.strange.BuildConfig.DEBUG;
@@ -42,22 +39,7 @@ public class RootFileUtils extends FileUtils
 			ret.add(new FileItem(path, name, isDir, isSymLink));
 		}
 		
-		Collections.sort(ret, new Comparator<FileItem>() {
-
-				@Override
-				public int compare(FileItem p1, FileItem p2)
-				{
-					if (p1.isDir && !p2.isDir) {
-						return -1;
-					} else if(!p1.isDir && p2.isDir) {
-						return 1;
-					} else {
-						return Collator.getInstance().compare(p1.name, p2.name);
-					}
-				}
-
-
-			});
+		FileItemComparator.sortFileItems(ret);
 		
 		if (!isRoot()) {
 			ret.add(0, new FileItem(getParent(), "..", true, false));
