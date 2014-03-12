@@ -295,6 +295,7 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 					break;
 				case R.string.drawer_file_action_view_archive:
 					// Create fragment to view the archive
+					mDrawer.closeDrawer(Gravity.END);
 					mAdapter.addItem(new ArchiveFragment(mSelected.path));
 					mAdapter.setCurrentItem(mAdapter.getCount() - 1);
 					break;
