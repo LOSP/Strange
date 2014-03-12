@@ -64,11 +64,7 @@ public class FileAdapter extends BaseAdapter
 			TextView fileName = (TextView) layout.findViewById(R.id.fragment_file_grid_item_file_name);
 			
 			colorText.setText(f.name.substring(0, 1));
-			if (f.name.length() > 6) {
-				fileName.setText(f.name.substring(0, 5) + "..");
-			} else {
-				fileName.setText(f.name);
-			}
+			fileName.setText(f.name);
 			
 			char first = f.name.charAt(0);
 			colorText.setBackgroundResource(COLORS[first % 10]);
