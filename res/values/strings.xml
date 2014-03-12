@@ -16,6 +16,7 @@
 	<string name="drawer_file_action_install">Install</string>
 	<string name="drawer_file_action_property">Properties</string>
 	<string name="drawer_file_action_delete">Delete</string>
+	<string name="drawer_file_action_view_archive">View Archive</string>
 	
 	<!-- Usage Statistics -->
 	<string name="statistics_used">Used</string>

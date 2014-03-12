@@ -293,6 +293,11 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 						}
 					}).start();
 					break;
+				case R.string.drawer_file_action_view_archive:
+					// Create fragment to view the archive
+					mAdapter.addItem(new ArchiveFragment(mSelected.path));
+					mAdapter.setCurrentItem(mAdapter.getCount() - 1);
+					break;
 			}
 		}
 	}

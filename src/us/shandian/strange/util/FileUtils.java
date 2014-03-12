@@ -20,6 +20,7 @@ public class FileUtils
 	enum FileType {
 		FLODER,
 		PACKAGE,
+		ARCHIVE,
 		UNKNOWN
 	}
 	
@@ -250,6 +251,9 @@ public class FileUtils
 			return FileType.FLODER;
 		} else if (item.name.endsWith(".apk")) {
 			return FileType.PACKAGE;
+		} else if (item.name.endsWith(".zip")) {
+			// TODO More archive types
+			return FileType.ARCHIVE;
 		} else {
 			return FileType.UNKNOWN;
 		}
@@ -263,6 +267,9 @@ public class FileUtils
 			ret.add(R.string.drawer_file_action_enter);
 		} else if (type == FileType.PACKAGE) {
 			ret.add(R.string.drawer_file_action_install);
+			ret.add(R.string.drawer_file_action_view_archive);
+		} else if (type == FileType.ARCHIVE) {
+			ret.add(R.string.drawer_file_action_view_archive);
 		}
 		ret.add(R.string.drawer_file_action_delete);
 		ret.add(R.string.drawer_file_action_property);
