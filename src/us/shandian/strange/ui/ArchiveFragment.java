@@ -78,4 +78,9 @@ public class ArchiveFragment extends BaseFileFragment
 			}
 		}
 	}
+
+	@Override
+	public void onActivate() {
+		((MainActivity) getActivity()).disableRemount();
+	}
 }
