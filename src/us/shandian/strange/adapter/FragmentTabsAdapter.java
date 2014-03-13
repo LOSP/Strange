@@ -13,6 +13,7 @@ import android.app.FragmentTransaction;
 import android.os.AsyncTask;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 
 import us.shandian.strange.ui.BaseFragment;
 import us.shandian.strange.ui.MainActivity;
@@ -164,13 +165,18 @@ public class FragmentTabsAdapter extends FragmentStatePagerAdapter implements Ta
 		new AsyncTask<Integer, Void, Void>() {
 			@Override
 			public Void doInBackground(Integer ... params){
-				for (BaseFragment f : mFragments) {
-					try {
-						f.onTint(params[0]);
-					} catch (NullPointerException e) {
-						// Something might be null when running
-						// Just avoid it and let it go
+				try {
+					for (BaseFragment f : mFragments) {
+						try {
+							f.onTint(params[0]);
+						} catch (NullPointerException e) {
+							// Something might be null when running
+							// Just avoid it and let it go
+						}
 					}
+				} catch (ConcurrentModificationException e) {
+					// Modified, do this task again
+					doInBackground(params);
 				}
 				return null;
 			}
