@@ -251,7 +251,7 @@ public class FileUtils
 			return FileType.FLODER;
 		} else if (item.name.endsWith(".apk")) {
 			return FileType.PACKAGE;
-		} else if (item.name.endsWith(".zip")) {
+		} else if (item.name.endsWith(".zip") || item.name.endsWith(".jar")) {
 			// TODO More archive types
 			return FileType.ARCHIVE;
 		} else {

@@ -36,7 +36,7 @@ public class ArchiveFragment extends BaseFileFragment
 			try {
 				// Create ArchiveUtils by archive type
 				// TODO More types of archives
-				if (mArchive.endsWith(".zip") || mArchive.endsWith(".apk")) {
+				if (ZipUtils.canLoad(mArchive)) {
 					if (DEBUG) {
 						android.util.Log.d(TAG, mArchive + " is a zip archive");
 					}

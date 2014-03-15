@@ -21,11 +21,16 @@ public class ZipUtils extends ArchiveUtils
 	private ZipFile mZip;
 	private ArrayList<FileItem> mEntries = new ArrayList<FileItem>();
 	
+	public static boolean canLoad(String name) {
+		return name.endsWith(".zip") || name.endsWith(".jar") ||
+				name.endsWith(".apk");
+	}
+	
 	public ZipUtils(String path) throws IOException {
 		super(path);
 		load();
 	}
-	
+    
 	private void load() throws IOException {
 		// Load all the files first
 		mZip = new ZipFile(mArchive);
