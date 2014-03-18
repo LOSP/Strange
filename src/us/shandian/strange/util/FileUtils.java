@@ -327,7 +327,7 @@ public class FileUtils
 						user = items[i];
 						break;
 					case 4:
-						size = items[i];
+						size = items[i] + "B";
 						break;
 					case 5:
 					case 6:
@@ -353,11 +353,11 @@ public class FileUtils
 			DecimalFormat df = new DecimalFormat("0.0");
 			
 			if (intSize < 1024) {
-				size = intSize + "K";
+				size = intSize + "KB";
 			} else if (intSize >= 1024 && intSize < (1024 * 1024)) {
-				size = df.format(intSize / 1024f) + "M";
+				size = df.format(intSize / 1024f) + "MB";
 			} else if (intSize >= (1024 * 1024)) {
-				size = df.format(intSize / (1024 * 1024f)) + "G";
+				size = df.format(intSize / (1024 * 1024f)) + "GB";
 			}
 		}
 		
