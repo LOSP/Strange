@@ -28,4 +28,12 @@
 	<string name="msg_wait">请稍候...</string>
 	<string name="msg_remount">此目录不可写，您需要将此目录重挂载为读写后执行此操作。</string>
 	
+	<!-- Properties -->
+	<string name="prop_path">路径:</string>
+	<string name="prop_permission">权限:</string>
+	<string name="prop_group">拥有者用户组:</string>
+	<string name="prop_user">拥有者:</string>
+	<string name="prop_size">大小:</string>
+	<string name="prop_timestamp">修改时间:</string>
+	
 </resources>

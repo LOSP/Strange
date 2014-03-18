@@ -30,4 +30,12 @@
 	<string name="msg_wait">Please wait...</string>
 	<string name="msg_remount">This path is unwritable, you have to remount it to Read &amp; Write before doing this.</string>
 	
+	<!-- Properties -->
+	<string name="prop_path">Path:</string>
+	<string name="prop_permission">Permission:</string>
+	<string name="prop_group">Owner Group:</string>
+	<string name="prop_user">Owner:</string>
+	<string name="prop_size">Size:</string>
+	<string name="prop_timestamp">Timestamp:</string>
+	
 </resources>

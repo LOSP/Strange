@@ -66,4 +66,14 @@ public class RootFileUtils extends FileUtils
 		new CMDProcessor().su.runWaitFor("busybox mount -o remount" + (rw ? " rw" : ",ro") + " " + mRemountPoint);
 		reloadWritablity();
 	}
+	
+	@Override
+	protected String getFileInfoStr(FileItem item) {
+		return new CMDProcessor().su.runWaitFor("busybox ls -ledh " + item.path).stdout;
+	}
+	
+	@Override
+	protected String getDirSize(FileItem item) {
+		return new CMDProcessor().su.runWaitFor("busybox du -sk " + item.path).stdout;
+	}
 }

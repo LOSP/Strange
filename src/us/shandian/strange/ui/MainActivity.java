@@ -21,6 +21,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.util.TypedValue;
 
 import android.support.v4.widget.DrawerLayout;
@@ -29,6 +30,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.ViewPager;
 
 import java.util.ArrayList;
+import java.lang.StringBuilder;
 import java.lang.reflect.Field;
 
 import us.shandian.strange.R;
@@ -69,8 +71,21 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 
 		@Override
 		public void handleMessage(Message msg) {
-			mProgress.dismiss();
-			allReload();
+			switch (msg.what) {
+				case 0:
+					// Dismiss the progress dialog and reload
+					mProgress.dismiss();
+					allReload();
+					break;
+				case 1:
+					// Only dismiss
+					mProgress.dismiss();
+					break;
+				case 2:
+					// AlertDialog needs to be built in main thread
+					((AlertDialog.Builder) msg.obj).create().show();
+					break;
+			}
 		}
 	};
 	
@@ -301,6 +316,18 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 					mAdapter.addItem(new ArchiveFragment(mSelected.path));
 					mAdapter.setCurrentItem(mAdapter.getCount() - 1);
 					break;
+				case R.string.drawer_file_action_property:
+					mDrawer.closeDrawer(Gravity.END);
+					
+					mProgress.show();
+					new Thread(new Runnable() {
+						@Override
+						public void run() {
+							showProperties();
+							mHandler.sendEmptyMessage(1);
+						}
+					}).start();
+					break;
 			}
 		}
 	}
@@ -366,6 +393,47 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 		
 		// Open left drawer to remind the user
 		mDrawer.openDrawer(Gravity.START);
+	}
+	
+	private void showProperties() {
+		AlertDialog.Builder dBuilder = new AlertDialog.Builder(this);
+		StringBuilder sBuilder = new StringBuilder();
+		Resources res = getResources();
+		
+		// Get the properties
+		FileItem.Info info = mSelectedUtils.getFileInfo(mSelected);
+		
+		// Build string
+		sBuilder.append(res.getString(R.string.prop_path))
+				.append(" ").append(mSelected.path)
+				.append("\n")
+				.append(res.getString(R.string.prop_permission))
+				.append(" ").append(info.permission)
+				.append("\n")
+				.append(res.getString(R.string.prop_group))
+				.append(" ").append(info.group)
+				.append("\n")
+				.append(res.getString(R.string.prop_user))
+				.append(" ").append(info.user)
+				.append("\n")
+				.append(res.getString(R.string.prop_size))
+				.append(" ").append(info.size)
+				.append("\n")
+				.append(res.getString(R.string.prop_timestamp))
+				.append(" ").append(info.timestamp);
+		
+		// Build up the dialog
+		dBuilder.setMessage(sBuilder.toString());
+		dBuilder.setTitle(res.getString(R.string.drawer_file_action_property));
+		dBuilder.setNegativeButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+			}
+		});
+		
+		// Call main thread to show the dialog
+		mHandler.sendMessage(mHandler.obtainMessage(2, dBuilder));
 	}
 	
 	// Get the height of statusbar

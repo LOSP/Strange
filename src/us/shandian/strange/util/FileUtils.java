@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.BufferedReader;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.lang.UnsupportedOperationException;
 
@@ -298,5 +299,76 @@ public class FileUtils
 		}
 		cmd += " " + file.path;
 		return cmd;
+	}
+	
+	public FileItem.Info getFileInfo(FileItem item) {
+		// Get the information of a file
+		String cmdLine = getFileInfoStr(item);
+		String[] items = cmdLine.split(" ");
+		String permission = "";
+		String group = "";
+		String user = "";
+		String size = "";
+		String timestamp = "";
+		
+		// Look into the items
+		int itemNum = -1;
+		for (int i = 0; i < items.length; i++) {
+			if (!items[i].trim().equals("")) {
+				itemNum++;
+				switch (itemNum) {
+					case 0:
+						permission = items[i];
+						break;
+					case 2:
+						group = items[i];
+						break;
+					case 3:
+						user = items[i];
+						break;
+					case 4:
+						size = items[i];
+						break;
+					case 5:
+					case 6:
+					case 7:
+					case 8:
+					case 9:
+						timestamp += items[i] + " ";
+						break;
+				}
+			}
+		}
+		
+		if (item.isDir) {
+			// If this item is a directory
+			// Load its size in another way
+			int intSize;
+			try {
+				intSize = Integer.parseInt(getDirSize(item).split("	")[0]);
+			} catch (NumberFormatException e) {
+				intSize = 0;
+			}
+			
+			DecimalFormat df = new DecimalFormat("0.0");
+			
+			if (intSize < 1024) {
+				size = intSize + "K";
+			} else if (intSize >= 1024 && intSize < (1024 * 1024)) {
+				size = df.format(intSize / 1024f) + "M";
+			} else if (intSize >= (1024 * 1024)) {
+				size = df.format(intSize / (1024 * 1024f)) + "G";
+			}
+		}
+		
+		return new FileItem.Info(permission, group, user, size, timestamp);
+	}
+	
+	protected String getFileInfoStr(FileItem item) {
+		return new CMDProcessor().sh.runWaitFor("busybox ls -ledh " + item.path).stdout;
+	}
+	
+	protected String getDirSize(FileItem item) {
+		return new CMDProcessor().sh.runWaitFor("busybox du -sk " + item.path).stdout;
 	}
 }

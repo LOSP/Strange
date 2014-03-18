@@ -12,4 +12,20 @@ public class FileItem {
 		this.isDir = isDir;
 		this.isSymLink = isSymLink;
 	}
+	
+	public static class Info {
+		public String permission;
+		public String group;
+		public String user;
+		public String size;
+		public String timestamp;
+		
+		public Info(String permission, String group, String user, String size, String timestamp) {
+			this.permission = permission;
+			this.group = group;
+			this.user = user;
+			this.size = size;
+			this.timestamp = timestamp;
+		}
+	}
 }
