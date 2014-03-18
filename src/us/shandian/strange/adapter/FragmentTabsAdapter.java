@@ -25,7 +25,6 @@ public class FragmentTabsAdapter extends FragmentStatePagerAdapter implements Ta
 		android.R.color.holo_green_dark,
 		android.R.color.holo_red_dark,
 		android.R.color.holo_purple,
-		android.R.color.holo_blue_dark,
 		android.R.color.holo_orange_dark
 	};
 	
@@ -153,9 +152,9 @@ public class FragmentTabsAdapter extends FragmentStatePagerAdapter implements Ta
 		// Set Tint Color
 		int id;
 		try {
-			id = dir.charAt(dir.lastIndexOf("/") + 1) % 5;
+			id = dir.charAt(dir.lastIndexOf("/") + 1) % COLORS.length;
 		} catch (Exception e) {
-			id = dir.charAt(0) % 5;
+			id = dir.charAt(0) % COLORS.length;
 		}
 		int tintColor = activity.getResources().getColor(COLORS[id]);
 		activity.setTintColor(tintColor);

@@ -29,7 +29,6 @@ public class FileAdapter extends BaseAdapter
 		android.R.color.holo_red_dark,
 		android.R.color.holo_blue_bright,
 		android.R.color.holo_purple,
-		android.R.color.holo_blue_dark,
 		android.R.color.holo_orange_dark,
 		android.R.color.holo_green_light
 	};
@@ -67,7 +66,7 @@ public class FileAdapter extends BaseAdapter
 			fileName.setText(f.name);
 			
 			char first = f.name.charAt(0);
-			colorText.setBackgroundResource(COLORS[first % 10]);
+			colorText.setBackgroundResource(COLORS[first % COLORS.length]);
 			
 			if (f.isDir) {
 				colorText.getPaint().setFakeBoldText(true);
