@@ -233,6 +233,12 @@ public class PullToRefreshLayout extends FrameLayout {
         return mPullToRefreshAttacher;
     }
 
+    @Override
+    public void setBackgroundColor(int color) {
+        getHeaderView().findViewById(R.id.ptr_content)
+                       .setBackgroundColor(color);
+    }
+
     static class LayoutParams extends FrameLayout.LayoutParams {
         private final String mViewDelegateClassName;
 

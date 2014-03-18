@@ -119,8 +119,6 @@ public class FileFragment extends BaseFileFragment
 		MainActivity activity = (MainActivity) getActivity();
 		activity.getFragmentTabsAdapter().renameItem(this);
 		activity.getActionBar().setTitle(mTitle);
-
-		activity.mAdapter.tintStatus(this);
 		
 		loadFiles();
 	}

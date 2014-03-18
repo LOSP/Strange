@@ -171,12 +171,14 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 		mTint = (TextView) findViewById(R.id.activity_main_statusbar_tint);
 		mTint.setHeight(getStatusBarHeight());
 		
+		setTintColor(getResources().getColor(android.R.color.holo_green_dark));
+		
 		// Split and stacked actionbar
 		getActionBar().setSplitBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.gray)));
 		getActionBar().setStackedBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.gray)));
 	}
 	
-	public void setTintColor(int color) {
+	private void setTintColor(int color) {
 		// Changes the color of ActionBar and StatusBar
 		getActionBar().setBackgroundDrawable(new ColorDrawable(color));
 		mTint.setBackgroundColor(color);

@@ -101,14 +101,11 @@ public class BaseFileFragment extends BaseFragment implements OnItemClickListene
 			.theseChildrenArePullable(new View[] {mGrid})
 			.listener(this)
 			.setup(mPullToRefresh);
+		
+		mPullToRefresh.setBackgroundColor(getResources()
+								.getColor(android.R.color.holo_green_dark));
 
 		loadFiles();
-
-		// Tint if I'm first
-		MainActivity activity = (MainActivity) getActivity();
-		if (activity.mAdapter.getItemPos(this) == 0) {
-			activity.mAdapter.tintStatus(this);
-		}
 
 		return view;
 	}
@@ -167,37 +164,5 @@ public class BaseFileFragment extends BaseFragment implements OnItemClickListene
 	@Override
 	public void onRefreshStarted(View view) {
 		loadFiles();
-	}
-	
-	@Override
-	public void onTint(int tintColor) {
-		// Tint the header view
-		PullToRefreshAttacher attacher = mPullToRefresh.getPullToRefreshAttacher();
-		if (attacher != null) {
-			if (DEBUG) {
-				android.util.Log.d(TAG, "Tinting Pull To Refresh");
-			}
-
-			// Set background
-			View v = attacher.getHeaderView()
-				.findViewById(uk.co.senab.actionbarpulltorefresh.library.R.id.ptr_content);
-
-			v.post(new HeaderViewTinter(v, tintColor));
-		}
-	}
-	
-	private class HeaderViewTinter implements Runnable {
-		private View mView;
-		private int mTintColor;
-
-		public HeaderViewTinter(View view, int tintColor) {
-			mView = view;
-			mTintColor = tintColor;
-		}
-
-		@Override
-		public void run() {
-			mView.setBackgroundDrawable(new ColorDrawable(mTintColor));
-		}
 	}
 }
