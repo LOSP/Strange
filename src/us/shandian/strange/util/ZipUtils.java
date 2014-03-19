@@ -65,7 +65,9 @@ public class ZipUtils extends ArchiveUtils
 				name = name.substring(1, name.length());
 			}
 			
-			mEntries.add(new FileItem(path, name, false, false));
+			if (!name.trim().endsWith("/")) {
+				mEntries.add(new FileItem(path, name, false, false));
+			}
 		}
 		
 		// Then let's record directories
