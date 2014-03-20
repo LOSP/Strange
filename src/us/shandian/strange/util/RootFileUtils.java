@@ -36,6 +36,16 @@ public class RootFileUtils extends FileUtils
 			String path = mDirPath + "/" + name;
 			boolean isDir = f.endsWith("/") ? true : false;
 			boolean isSymLink = f.endsWith("@") ? true : false;
+			
+			// If it is a symlink, we have to try
+			// To find out if it is a directory
+			if (isSymLink) {
+				String out = new CMDProcessor().su.runWaitFor("busybox ls -1Fa " + path + "/").stdout;
+				if (out != null && out.split("\n").length > 1) {
+					isDir = true;
+				}
+			}
+			
 			ret.add(new FileItem(path, name, isDir, isSymLink));
 		}
 		
