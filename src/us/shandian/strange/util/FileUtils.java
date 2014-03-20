@@ -162,8 +162,8 @@ public class FileUtils
 				if (DEBUG) {
 					android.util.Log.d(TAG, "percent = " + tmpPercentage);
 				}
-				mUsed = tmpUsed;
-				mFree = tmpFree;
+				mUsed = tmpUsed + "B";
+				mFree = tmpFree + "B";
 				mUsedPercentage = Integer.parseInt(tmpPercentage.replace("%", ""));
 				break;
 			}
