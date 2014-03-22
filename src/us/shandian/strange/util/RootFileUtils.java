@@ -23,7 +23,7 @@ public class RootFileUtils extends FileUtils
 	@Override
 	public ArrayList<FileItem> getFileItems() {
 		ArrayList<FileItem> ret = new ArrayList<FileItem>();
-		String result = new CMDProcessor().su.runWaitFor("busybox ls -1Fa " + mDirPath + "/").stdout;
+		String result = mCmd.su.runWaitFor("busybox ls -1Fa " + mDirPath + "/").stdout;
 		String[] fileNames = result == null ? new String[0] : result.split("\n");
 		for (String f : fileNames) {
 			if (f.equals("./") || f.equals("../")) continue;
@@ -40,7 +40,7 @@ public class RootFileUtils extends FileUtils
 			// If it is a symlink, we have to try
 			// To find out if it is a directory
 			if (isSymLink) {
-				String out = new CMDProcessor().su.runWaitFor("busybox ls -1Fa " + path + "/").stdout;
+				String out = mCmd.su.runWaitFor("busybox ls -1Fa " + path + "/").stdout;
 				if (out != null && out.split("\n").length > 1) {
 					isDir = true;
 				}
@@ -60,12 +60,12 @@ public class RootFileUtils extends FileUtils
 
 	@Override
 	public void delete(FileItem file) {
-		new CMDProcessor().su.runWaitFor(generateDeleteCmd(file));
+		mCmd.su.runWaitFor(generateDeleteCmd(file));
 	}
 
 	@Override
 	protected String getMountTable() {
-		return new CMDProcessor().su.runWaitFor("busybox mount").stdout;
+		return mCmd.su.runWaitFor("busybox mount").stdout;
 	}
 
 	@Override
@@ -73,17 +73,17 @@ public class RootFileUtils extends FileUtils
 		if (DEBUG) {
 			android.util.Log.d(TAG, "remount cmd : " + "busybox mount -o remount" + (rw ? " rw" : ",ro") + " " + mRemountPoint);
 		}
-		new CMDProcessor().su.runWaitFor("busybox mount -o remount" + (rw ? " rw" : ",ro") + " " + mRemountPoint);
+		mCmd.su.runWaitFor("busybox mount -o remount" + (rw ? " rw" : ",ro") + " " + mRemountPoint);
 		reloadWritablity();
 	}
 	
 	@Override
 	protected String getFileInfoStr(FileItem item) {
-		return new CMDProcessor().su.runWaitFor("busybox ls -ledh " + item.path).stdout;
+		return mCmd.su.runWaitFor("busybox ls -ledh " + item.path).stdout;
 	}
 	
 	@Override
 	protected String getDirSize(FileItem item) {
-		return new CMDProcessor().su.runWaitFor("busybox du -sk " + item.path).stdout;
+		return mCmd.su.runWaitFor("busybox du -sk " + item.path).stdout;
 	}
 }

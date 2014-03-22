@@ -38,6 +38,9 @@ public class FileUtils
 	private boolean mCanWrite = false;
 	protected String mRemountPoint = "";
 	
+	// CMDProcessor
+	protected CMDProcessor mCmd = CMDProcessor.instance();
+	
 	public FileUtils(String dir) {
 		mDir = new File(dir);
 		
@@ -113,7 +116,7 @@ public class FileUtils
 		}
 		
 		// Ask shell for those data
-		String shell = new CMDProcessor().sh.runWaitFor("busybox df -h").stdout;
+		String shell = mCmd.sh.runWaitFor("busybox df -h").stdout;
 		
 		// A lot to process
 		BufferedReader r = new BufferedReader(new StringReader(shell));
@@ -227,7 +230,7 @@ public class FileUtils
 	}
 	
 	protected String getMountTable() {
-		return new CMDProcessor().sh.runWaitFor("busybox mount").stdout;
+		return mCmd.sh.runWaitFor("busybox mount").stdout;
 	}
 	
 	public boolean canWrite() {
@@ -289,7 +292,7 @@ public class FileUtils
 	}
 	
 	public void delete(FileItem file) {
-		new CMDProcessor().sh.runWaitFor(generateDeleteCmd(file));
+		mCmd.sh.runWaitFor(generateDeleteCmd(file));
 	}
 	
 	protected String generateDeleteCmd(FileItem file) {
@@ -365,10 +368,10 @@ public class FileUtils
 	}
 	
 	protected String getFileInfoStr(FileItem item) {
-		return new CMDProcessor().sh.runWaitFor("busybox ls -ledh " + item.path).stdout;
+		return mCmd.sh.runWaitFor("busybox ls -ledh " + item.path).stdout;
 	}
 	
 	protected String getDirSize(FileItem item) {
-		return new CMDProcessor().sh.runWaitFor("busybox du -sk " + item.path).stdout;
+		return mCmd.sh.runWaitFor("busybox du -sk " + item.path).stdout;
 	}
 }

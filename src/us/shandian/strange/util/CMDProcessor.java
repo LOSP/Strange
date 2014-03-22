@@ -38,14 +38,23 @@ import us.shandian.strange.R;
 public class CMDProcessor {
 
 	private static final String TAG = "CMD Processor";
+	private static CMDProcessor mInstance;
 	private Boolean can_su;
 	public SH sh;
 	public SH su;
 	public static String BUSYBOX = "busybox";
 
-	public CMDProcessor() {
+	private CMDProcessor() {
 		sh = new SH("sh");
 		su = new SH("su");
+	}
+	
+	public static CMDProcessor instance() {
+		if (mInstance == null) {
+			mInstance = new CMDProcessor();
+		}
+		
+		return mInstance;
 	}
 
 	public SH suOrSH() {
