@@ -53,6 +53,14 @@ public class FileUtils
 	}
 	
 	public ArrayList<FileItem> getFileItems() {
+		String parentAbsolute = mDir.getAbsolutePath();
+		String parentCanonical;
+		try {
+			parentCanonical = mDir.getCanonicalPath();
+		} catch (IOException e) {
+			parentCanonical = parentAbsolute;
+		}
+		
 		// Get all files and dirs
 		final ArrayList<FileItem> ret = new ArrayList<FileItem>();
 		File[] files = mDir.listFiles();
@@ -64,8 +72,6 @@ public class FileUtils
 			try {
 				String absolutePath = f.getAbsolutePath();
 				String canonicalPath = f.getCanonicalPath();
-				String parentAbsolute = mDir.getAbsolutePath();
-				String parentCanonical = mDir.getCanonicalPath();
 				
 				if (!parentAbsolute.equals(parentCanonical)) {
 					// Parent floder itself is a symlink
