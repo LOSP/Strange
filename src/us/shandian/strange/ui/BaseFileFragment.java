@@ -61,11 +61,6 @@ public class BaseFileFragment extends BaseFragment implements OnItemClickListene
 		@Override
 		public void handleMessage(Message msg) {
 			// This is only for loading thread
-			FragmentTabsAdapter adapter = ((MainActivity) getActivity()).mAdapter;
-			if (adapter.getItemPos(BaseFileFragment.this) == adapter.getCurrent()) {
-				onActivate();
-			}
-
 			mGrid.setAdapter(mAdapter);
 			mGrid.setOnItemClickListener(BaseFileFragment.this);
 			mGrid.setOnItemLongClickListener(BaseFileFragment.this);
@@ -93,6 +88,8 @@ public class BaseFileFragment extends BaseFragment implements OnItemClickListene
 		mFree = (TextView) view.findViewById(R.id.fragment_file_usage_free);
 		mWritablity = (TextView) view.findViewById(R.id.fragment_file_usage_writablity);
 
+		mGrid.setDrawingCacheEnabled(true);
+		
 		// Pull To Refresh
 		mPullToRefresh = new PullToRefreshLayout(mGrid.getContext());
 
