@@ -10,16 +10,20 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.pm.ApplicationInfo;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.os.Message;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import us.shandian.strange.R;
 import us.shandian.strange.type.FileItem;
+import static us.shandian.strange.BuildConfig.DEBUG;
 
 public class FileAdapter extends BaseAdapter
 {
+	private static final String TAG = FileAdapter.class.getSimpleName();
 	
 	private static final int[] COLORS = new int[] {
 		android.R.color.holo_blue_light,
@@ -37,7 +41,8 @@ public class FileAdapter extends BaseAdapter
 	private ArrayList<FileItem> mFiles;
 	
 	private ArrayList<LinearLayout> mLayouts = new ArrayList<LinearLayout>();
-	private ArrayList<Boolean> mLoadeds = new ArrayList<Boolean>();
+	
+	private HashMap<LinearLayout, Drawable> mIcons = new HashMap<LinearLayout, Drawable>();
 	
 	private Handler mHandler = new Handler() {
 		@Override
@@ -46,6 +51,9 @@ public class FileAdapter extends BaseAdapter
 			LinearLayout layout = mLayouts.get(msg.what);
 			TextView colorText = (TextView) layout.findViewById(R.id.fragment_file_grid_item_color_text);
 			colorText.post(new IconChanger((Drawable) msg.obj, colorText));
+			
+			// Save
+			mIcons.put(layout, (Drawable) msg.obj);
 		}
 	};
 	
@@ -79,9 +87,9 @@ public class FileAdapter extends BaseAdapter
 			
 			// Add to list
 			mLayouts.add(layout);
-			
-			mLoadeds.add(false);
 		}
+		
+		new Thread(new IconLoader()).start();
 	}
 	
 	@Override
@@ -104,11 +112,13 @@ public class FileAdapter extends BaseAdapter
 		if (position >= mLayouts.size()) {
 			return convertView;
 		} else {
-			if (!mLoadeds.get(position)) {
-				// Only load once
-				mLoadeds.set(position, true);
-				if (mFiles.get(position).name.toLowerCase().endsWith(".apk")) {
-					new Thread(new IconLoader(position)).start();
+			LinearLayout layout = mLayouts.get(position);
+			
+			// Load saved icon
+			if (mIcons.containsKey(layout)) {
+				if (!(layout.getBackground() instanceof BitmapDrawable)) {
+					TextView colorText = (TextView) layout.findViewById(R.id.fragment_file_grid_item_color_text);
+					colorText.post(new IconChanger(mIcons.get(layout), colorText));
 				}
 			}
 			return mLayouts.get(position);
@@ -116,27 +126,32 @@ public class FileAdapter extends BaseAdapter
 	}
 
 	private class IconLoader implements Runnable {
-		private int position;
-		
-		public IconLoader(int position) {
-			this.position = position;
-		}
 		
 		@Override
 		public void run() {
-			FileItem f = mFiles.get(position);
-			ApplicationInfo info;
-			try {
-				info = mContext.getPackageManager().getPackageArchiveInfo(f.path, PackageManager.GET_ACTIVITIES)
-								.applicationInfo;
-			} catch (Exception e) {
-				e.printStackTrace();
-				return;
+			for (FileItem f : mFiles) {
+				if (f.isDir || !f.name.toLowerCase().endsWith(".apk")) continue;
+				
+				int index = mFiles.indexOf(f);
+				
+				if (DEBUG) {
+					android.util.Log.d(TAG, "f.name = " + f.name);
+				}
+				
+				ApplicationInfo info;
+				try {
+					info = mContext.getPackageManager().getPackageArchiveInfo(f.path, PackageManager.GET_ACTIVITIES)
+									.applicationInfo;
+				} catch (Exception e) {
+					e.printStackTrace();
+					return;
+				}
+				info.sourceDir = f.path;
+				info.publicSourceDir = f.path;
+				Drawable icon = info.loadIcon(mContext.getPackageManager());
+				
+				mHandler.sendMessage(mHandler.obtainMessage(index, icon));
 			}
-			info.sourceDir = f.path;
-			info.publicSourceDir = f.path;
-			Drawable icon = info.loadIcon(mContext.getPackageManager());
-			mHandler.sendMessage(mHandler.obtainMessage(position, icon));
 		}
 	}
 	
