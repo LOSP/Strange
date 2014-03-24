@@ -61,6 +61,11 @@ public class BaseFileFragment extends BaseFragment implements OnItemClickListene
 		@Override
 		public void handleMessage(Message msg) {
 			// This is only for loading thread
+			FragmentTabsAdapter adapter = ((MainActivity) getActivity()).mAdapter;
+			if (adapter.getItemPos(BaseFileFragment.this) == adapter.getCurrent()) {
+				onActivate();
+			}
+			
 			mAdapter = new FileAdapter(getActivity(), mFiles);
 			mGrid.setAdapter(mAdapter);
 			mGrid.setOnItemClickListener(BaseFileFragment.this);
