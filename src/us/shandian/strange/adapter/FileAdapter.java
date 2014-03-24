@@ -61,34 +61,7 @@ public class FileAdapter extends BaseAdapter
 		mContext = context;
 		mFiles = files;
 		
-		LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		for (FileItem f : mFiles) {
-			// Inflate all the views
-			LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.fragment_file_grid_item, null);
-			
-			// Find views and set texts
-			TextView colorText = (TextView) layout.findViewById(R.id.fragment_file_grid_item_color_text);
-			TextView fileName = (TextView) layout.findViewById(R.id.fragment_file_grid_item_file_name);
-			
-			colorText.setText(f.name.substring(0, 1));
-			fileName.setText(f.name);
-			
-			char first = f.name.charAt(0);
-			colorText.setBackgroundResource(COLORS[first % COLORS.length]);
-			
-			if (f.isDir) {
-				colorText.getPaint().setFakeBoldText(true);
-			}
-			
-			if (f.isSymLink) {
-				colorText.getPaint().setFakeBoldText(true);
-				colorText.getPaint().setUnderlineText(true);
-			}
-			
-			// Add to list
-			mLayouts.add(layout);
-		}
-		
+		new Thread(new ItemInflater()).start();
 		new Thread(new IconLoader()).start();
 	}
 	
@@ -109,9 +82,11 @@ public class FileAdapter extends BaseAdapter
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		if (position >= mLayouts.size()) {
+		if (position >= mFiles.size()) {
 			return convertView;
 		} else {
+			while (mLayouts.size() <= position);
+			
 			LinearLayout layout = mLayouts.get(position);
 			
 			// Load saved icon
@@ -121,7 +96,8 @@ public class FileAdapter extends BaseAdapter
 					colorText.post(new IconChanger(mIcons.get(layout), colorText));
 				}
 			}
-			return mLayouts.get(position);
+			
+			return layout;
 		}
 	}
 
@@ -137,6 +113,8 @@ public class FileAdapter extends BaseAdapter
 				if (DEBUG) {
 					android.util.Log.d(TAG, "f.name = " + f.name);
 				}
+				
+				while (mLayouts.size() <= index);
 				
 				ApplicationInfo info;
 				try {
@@ -168,6 +146,43 @@ public class FileAdapter extends BaseAdapter
 		public void run() {
 			view.setText("");
 			view.setBackgroundDrawable(icon);
+		}
+	}
+	
+	private class ItemInflater implements Runnable {
+		@Override
+		public void run() {
+			// Inflate all the views in background
+			LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			for (FileItem f : mFiles) {
+				// Inflate all the views
+				LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.fragment_file_grid_item, null);
+
+				// Find views and set texts
+				TextView colorText = (TextView) layout.findViewById(R.id.fragment_file_grid_item_color_text);
+				TextView fileName = (TextView) layout.findViewById(R.id.fragment_file_grid_item_file_name);
+
+				colorText.setText(f.name.substring(0, 1));
+				fileName.setText(f.name);
+
+				char first = f.name.charAt(0);
+				colorText.setBackgroundResource(COLORS[first % COLORS.length]);
+
+				if (f.isDir) {
+					colorText.getPaint().setFakeBoldText(true);
+				}
+
+				if (f.isSymLink) {
+					colorText.getPaint().setFakeBoldText(true);
+					colorText.getPaint().setUnderlineText(true);
+				}
+
+				// Add to list
+				mLayouts.add(layout);
+				
+				// Interrupt this thread
+				Thread.currentThread().interrupt();
+			}
 		}
 	}
 }
