@@ -61,6 +61,8 @@ public class FileUtils
 			parentCanonical = parentAbsolute;
 		}
 		
+		boolean parentIsSymlink = !parentAbsolute.equals(parentCanonical);
+		
 		// Get all files and dirs
 		final ArrayList<FileItem> ret = new ArrayList<FileItem>();
 		File[] files = mDir.listFiles();
@@ -73,7 +75,7 @@ public class FileUtils
 				String absolutePath = f.getAbsolutePath();
 				String canonicalPath = f.getCanonicalPath();
 				
-				if (!parentAbsolute.equals(parentCanonical)) {
+				if (parentIsSymlink) {
 					// Parent floder itself is a symlink
 					absolutePath = absolutePath.replaceFirst(parentAbsolute, parentCanonical);
 				}
