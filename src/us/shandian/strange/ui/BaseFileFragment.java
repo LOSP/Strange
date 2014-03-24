@@ -57,11 +57,11 @@ public class BaseFileFragment extends BaseFragment implements OnItemClickListene
 
 	protected boolean mLoaderFinished = true;
 
-	private Thread mThread;
 	private Handler mHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
 			// This is only for loading thread
+			mAdapter = new FileAdapter(getActivity(), mFiles);
 			mGrid.setAdapter(mAdapter);
 			mGrid.setOnItemClickListener(BaseFileFragment.this);
 			mGrid.setOnItemLongClickListener(BaseFileFragment.this);
@@ -113,40 +113,18 @@ public class BaseFileFragment extends BaseFragment implements OnItemClickListene
 
 		mProgress.setVisibility(View.VISIBLE);
 		mGrid.setVisibility(View.GONE);
-		
-		if (mThread != null) {
-			mThread.interrupt();
-		}
 
 		// Start loading thread
-		mThread = new Thread(new Runnable() {
-			private boolean looperPrepared = false;
-
+		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				if (!looperPrepared) {
-					Looper.prepare();
-					looperPrepared = true;
-				}
-				
 				doLoadFiles();
 				
-				try {
-					mAdapter = new FileAdapter(getActivity(), mFiles);
-				} catch (NullPointerException e) {
-					run();
-
-					// The following should not be called
-					// But for safety, let's return
-					return;
-				}
 				mHandler.sendEmptyMessage(0);
 
-				Looper.loop();
+				Thread.currentThread().interrupt();
 			}
-		});
-		
-		mThread.start();
+		}).start();
 	}
 	
 	protected void doLoadFiles() {
