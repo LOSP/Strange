@@ -39,17 +39,16 @@ public class FileFragment extends BaseFileFragment
 		// Load files
 		mFileUtils = new FileUtils(mDir);
 
+		// If not writable, try root
+		if (!(mFileUtils instanceof RootFileUtils) && !mFileUtils.canWrite()) {
+			mFileUtils = new RootFileUtils(mDir);
+		}
+		
 		// Do some loading
 		try {
 			mFiles = mFileUtils.getFileItems();
 		} catch (NullPointerException e) {
 			// Permission denied, use root
-			mFileUtils = new RootFileUtils(mDir);
-			mFiles = mFileUtils.getFileItems();
-		}
-
-		// If not writable, try root
-		if (!(mFileUtils instanceof RootFileUtils) && !mFileUtils.canWrite()) {
 			mFileUtils = new RootFileUtils(mDir);
 			mFiles = mFileUtils.getFileItems();
 		}
