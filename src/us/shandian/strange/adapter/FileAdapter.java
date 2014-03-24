@@ -130,6 +130,8 @@ public class FileAdapter extends BaseAdapter
 				
 				mHandler.sendMessage(mHandler.obtainMessage(index, icon));
 			}
+			
+			Thread.currentThread().interrupt();
 		}
 	}
 	
@@ -179,10 +181,10 @@ public class FileAdapter extends BaseAdapter
 
 				// Add to list
 				mLayouts.add(layout);
-				
-				// Interrupt this thread
-				Thread.currentThread().interrupt();
 			}
+			
+			// Interrupt this thread
+			Thread.currentThread().interrupt();
 		}
 	}
 }
