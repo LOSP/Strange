@@ -57,6 +57,21 @@ public class RootFileUtils extends FileUtils
 		
 		return ret;
 	}
+	
+	public void remount() {
+		String[] mounts = mCmd.getMounts(mDirPath);
+		if (mounts == null) {
+			mounts = mCmd.getMounts("/");
+		}
+		
+		String mountPoint = mounts[1];
+		
+		if (DEBUG) {
+			android.util.Log.d(TAG, "mountPoint = " + mountPoint);
+		}
+		
+		mCmd.su.runWaitFor("busybox mount -o remount rw " + mountPoint);
+	}
 
 	@Override
 	public void delete(FileItem file) {

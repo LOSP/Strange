@@ -43,6 +43,7 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 {
 	private static final int DRAWER_MAIN_NEW = 0;
 	private static final int DRAWER_MAIN_CLOSE = 1;
+	private static final int DRAWER_MAIN_GRANT = 2;
 	
 	private DrawerLayout mDrawer;
 	private ListView mDrawerList;
@@ -276,6 +277,12 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 					}
 					mAdapter.removeItem(mAdapter.getCurrent());
 					break;
+				case DRAWER_MAIN_GRANT:
+					BaseFragment f = mAdapter.getItem(mAdapter.getCurrent());
+					if (f instanceof FileFragment) {
+						((FileFragment) f).grant();
+					}
+					break;
 					
 			}
 		} else if (parent == mFileActions) {
@@ -345,6 +352,20 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 				((FileFragment) f).loadFiles();
 			}
 		}
+	}
+	
+	public void alertPermission() {
+		AlertDialog.Builder dBuilder = new AlertDialog.Builder(this);
+		dBuilder.setMessage(R.string.msg_grant);
+		dBuilder.setNegativeButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+			}
+		});
+		
+		// Call main thread to show the dialog
+		mHandler.sendMessage(mHandler.obtainMessage(2, dBuilder));
 	}
 	
 	private void showProperties() {

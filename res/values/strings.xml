@@ -6,6 +6,7 @@
 	<!-- Navigation Drawer -->
 	<string name="drawer_new">New Tab</string>
 	<string name="drawer_close">Close Tab</string>
+	<string name="drawer_grant">Grant root permission</string>
 	<string name="drawer_about">About</string>
 	
 	<!-- File Drawer -->
@@ -18,6 +19,7 @@
 	
 	<!-- Messages -->
 	<string name="msg_wait">Please wait...</string>
+	<string name="msg_grant">Permission denied, please try to grant root permission</string>
 	
 	<!-- Properties -->
 	<string name="prop_path">Path:</string>

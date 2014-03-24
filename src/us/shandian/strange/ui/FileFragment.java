@@ -5,6 +5,7 @@ import android.widget.AdapterView;
 
 import java.lang.NullPointerException;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import us.shandian.strange.R;
 import us.shandian.strange.type.FileItem;
@@ -25,6 +26,10 @@ public class FileFragment extends BaseFileFragment
 	
 	private FileUtils mFileUtils;
 	
+	private boolean mGranted = false;
+	private boolean mRemounted = false;
+	private boolean mAlertShown = false;
+	
 	public FileFragment() {
 		// TODO: replace this with default dir
 		this("/sdcard");
@@ -35,18 +40,34 @@ public class FileFragment extends BaseFileFragment
 		mTitle = dir;
 	}
 	
+	public void grant() {
+		mGranted = true;
+		mRemounted = false;
+		loadFiles();
+	}
+	
 	@Override
 	protected void doLoadFiles() {
 		// Load files
-		mFileUtils = new FileUtils(mDir);
+		if (!mGranted) {
+			mFileUtils = new FileUtils(mDir);
+		} else {
+			mFileUtils = new RootFileUtils(mDir);
+			if (!mRemounted) {
+				((RootFileUtils) mFileUtils).remount();
+			}
+		}
 		
 		// Do some loading
 		try {
 			mFiles = mFileUtils.getFileItems();
 		} catch (NullPointerException e) {
-			// Permission denied, use root
-			mFileUtils = new RootFileUtils(mDir);
-			mFiles = mFileUtils.getFileItems();
+			// Permission denied
+			if (!mAlertShown) {
+				getMainActivity().alertPermission();
+				mAlertShown = true;
+			}
+			mFiles = new ArrayList<FileItem>();
 		}
 	}
 	
@@ -80,6 +101,8 @@ public class FileFragment extends BaseFileFragment
 		MainActivity activity = (MainActivity) getActivity();
 		activity.getFragmentTabsAdapter().renameItem(this);
 		activity.getActionBar().setTitle(mTitle);
+		
+		mAlertShown = false;
 		
 		loadFiles();
 	}

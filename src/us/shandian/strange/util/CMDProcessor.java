@@ -192,11 +192,19 @@ public class CMDProcessor {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader("/proc/mounts"), 256);
 			String line = null;
+			String[] ret = null;
 			while ((line = br.readLine()) != null) {
-				if (line.contains(path)) {
-					return line.split(" ");
+				String[] items = line.split(" ");
+				
+				if (path.startsWith(items[1])) {
+					ret = items;
 				}
 			}
+			
+			if (ret != null) {
+				return ret;
+			}
+			
 			br.close();
 		}
 		catch (FileNotFoundException e) {

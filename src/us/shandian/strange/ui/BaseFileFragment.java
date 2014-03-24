@@ -111,7 +111,7 @@ public class BaseFileFragment extends BaseFragment implements OnItemClickListene
 				
 				mHandler.sendEmptyMessage(0);
 
-				Thread.currentThread().interrupt();
+				// Thread.currentThread().interrupt();
 			}
 		}).start();
 	}

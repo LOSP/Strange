@@ -4,6 +4,7 @@
 	<!-- Navigation Drawer -->
 	<string name="drawer_new">新建标签页</string>
 	<string name="drawer_close">关闭标签页</string>
+	<string name="drawer_grant">获取ROOT权限</string>
 	<string name="drawer_about">关于</string>
 
 	<!-- File Drawer -->
@@ -16,6 +17,7 @@
 	
 	<!-- Messages -->
 	<string name="msg_wait">请稍候...</string>
+	<string name="msg_grant">访问被拒绝，请尝试获取ROOT权限</string>
 	
 	<!-- Properties -->
 	<string name="prop_path">路径:</string>

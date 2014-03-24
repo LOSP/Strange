@@ -21,4 +21,9 @@ public class BaseFragment extends Fragment
 	public void onActivate() {
 		
 	}
+	
+	protected MainActivity getMainActivity() {
+		// TODO: Implement this method
+		return (MainActivity) super.getActivity();
+	}
 }
