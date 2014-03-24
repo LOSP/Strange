@@ -124,6 +124,8 @@ public class FileUtils
 		// Ask shell for those data
 		String shell = mCmd.sh.runWaitFor("busybox df -h").stdout;
 		
+		if (shell == null) return;
+		
 		// A lot to process
 		BufferedReader r = new BufferedReader(new StringReader(shell));
 		

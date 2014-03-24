@@ -57,6 +57,7 @@ public class BaseFileFragment extends BaseFragment implements OnItemClickListene
 
 	protected boolean mLoaderFinished = true;
 
+	private Thread mThread;
 	private Handler mHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
@@ -112,9 +113,13 @@ public class BaseFileFragment extends BaseFragment implements OnItemClickListene
 
 		mProgress.setVisibility(View.VISIBLE);
 		mGrid.setVisibility(View.GONE);
+		
+		if (mThread != null) {
+			mThread.interrupt();
+		}
 
 		// Start loading thread
-		new Thread(new Runnable() {
+		mThread = new Thread(new Runnable() {
 			private boolean looperPrepared = false;
 
 			@Override
@@ -139,7 +144,9 @@ public class BaseFileFragment extends BaseFragment implements OnItemClickListene
 
 				Looper.loop();
 			}
-		}).start();
+		});
+		
+		mThread.start();
 	}
 	
 	protected void doLoadFiles() {
