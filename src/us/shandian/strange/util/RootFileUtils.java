@@ -62,20 +62,6 @@ public class RootFileUtils extends FileUtils
 	public void delete(FileItem file) {
 		mCmd.su.runWaitFor(generateDeleteCmd(file));
 	}
-
-	@Override
-	protected String getMountTable() {
-		return mCmd.su.runWaitFor("busybox mount").stdout;
-	}
-
-	@Override
-	public void remount(boolean rw) {
-		if (DEBUG) {
-			android.util.Log.d(TAG, "remount cmd : " + "busybox mount -o remount" + (rw ? " rw" : ",ro") + " " + mRemountPoint);
-		}
-		mCmd.su.runWaitFor("busybox mount -o remount" + (rw ? " rw" : ",ro") + " " + mRemountPoint);
-		reloadWritablity();
-	}
 	
 	@Override
 	protected String getFileInfoStr(FileItem item) {

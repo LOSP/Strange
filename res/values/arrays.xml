@@ -5,7 +5,6 @@
 	<string-array name="drawer_items" translatable="false">
 		<item>@string/drawer_new</item>
 		<item>@string/drawer_close</item>
-		<item>@string/drawer_remount</item>
 		<item>@string/drawer_about</item>
 	</string-array>
 	

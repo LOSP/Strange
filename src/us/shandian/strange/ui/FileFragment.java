@@ -38,11 +38,6 @@ public class FileFragment extends BaseFileFragment
 	protected void doLoadFiles() {
 		// Load files
 		mFileUtils = new FileUtils(mDir);
-
-		// If not writable, try root
-		if (!(mFileUtils instanceof RootFileUtils) && !mFileUtils.canWrite()) {
-			mFileUtils = new RootFileUtils(mDir);
-		}
 		
 		// Do some loading
 		try {
@@ -74,17 +69,6 @@ public class FileFragment extends BaseFileFragment
 			mFree.setText(mFileUtils.getFree() + " " + getActivity().getResources().getString(R.string.statistics_free));
 		} else {
 			mUsage.setVisibility(View.GONE);
-		}
-		
-		// Writablity
-		// Though usage statistics may not available,
-		// We still get the readablity.
-		// Even if it cannot be seen,
-		// It can still be used for the left menu
-		if (mFileUtils.canWrite()) {
-			mWritablity.setText(R.string.writablity_rw);
-		} else {
-			mWritablity.setText(R.string.writablity_ro);
 		}
 	}
 	
@@ -131,37 +115,5 @@ public class FileFragment extends BaseFileFragment
 				getActivity().finish();
 			}
 		}
-	}
-	
-	@Override
-	public void onActivate() {
-		if (getActivity() == null) return;
-		
-		if (DEBUG) {
-			android.util.Log.d(TAG, "onActivate");
-		}
-		
-		onActivate((MainActivity) getActivity());
-	}
-	
-	public void onActivate(MainActivity activity) {
-		if (mFileUtils instanceof RootFileUtils) {
-			activity.setWritablity(mFileUtils.canWrite());
-		} else {
-			activity.disableRemount();
-		}
-	}
-	
-	public void remount() {
-		if (DEBUG) {
-			android.util.Log.d(TAG, "beginning remount");
-		}
-		
-		// We can only remount with root
-		if (!(mFileUtils instanceof RootFileUtils)) {
-			return;
-		}
-		mFileUtils.remount(!mFileUtils.canWrite());
-		initUsageStatistics();
 	}
 }

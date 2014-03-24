@@ -54,15 +54,6 @@
 			android:gravity="center_vertical|left"
 			android:textAppearance="?android:attr/textAppearanceMedium"
 			android:textColor="#6F6F6F"/>
-		
-		<TextView
-			android:id="@+id/fragment_file_usage_writablity"
-			android:layout_height="match_parent"
-			android:layout_width="match_parent"
-			android:layout_gravity="start"
-			android:gravity="center"
-			android:textAppearance="?android:attr/textAppearanceMedium"
-			android:textColor="#6F6F6F"/>
 
 		<TextView
 			android:id="@+id/fragment_file_usage_free"

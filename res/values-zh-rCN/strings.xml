@@ -4,8 +4,6 @@
 	<!-- Navigation Drawer -->
 	<string name="drawer_new">新建标签页</string>
 	<string name="drawer_close">关闭标签页</string>
-	<string name="drawer_remount">重挂载</string>
-	<string name="drawer_remount_none">不可用</string>
 	<string name="drawer_about">关于</string>
 
 	<!-- File Drawer -->
@@ -20,13 +18,8 @@
 	<string name="statistics_used">已用</string>
 	<string name="statistics_free">空闲</string>
 	
-	<!-- Writablity -->
-	<string name="writablity_rw">读 &amp; 写</string>
-	<string name="writablity_ro">只读</string>
-	
 	<!-- Messages -->
 	<string name="msg_wait">请稍候...</string>
-	<string name="msg_remount">此目录不可写，您需要将此目录重挂载为读写后执行此操作。</string>
 	
 	<!-- Properties -->
 	<string name="prop_path">路径:</string>

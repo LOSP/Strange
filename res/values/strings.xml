@@ -6,8 +6,6 @@
 	<!-- Navigation Drawer -->
 	<string name="drawer_new">New Tab</string>
 	<string name="drawer_close">Close Tab</string>
-	<string name="drawer_remount">Remount</string>
-	<string name="drawer_remount_none">Unavailable</string>
 	<string name="drawer_about">About</string>
 	
 	<!-- File Drawer -->
@@ -22,13 +20,8 @@
 	<string name="statistics_used">Used</string>
 	<string name="statistics_free">Free</string>
 	
-	<!-- Writablity -->
-	<string name="writablity_rw">Read &amp; Write</string>
-	<string name="writablity_ro">Read Only</string>
-	
 	<!-- Messages -->
 	<string name="msg_wait">Please wait...</string>
-	<string name="msg_remount">This path is unwritable, you have to remount it to Read &amp; Write before doing this.</string>
 	
 	<!-- Properties -->
 	<string name="prop_path">Path:</string>

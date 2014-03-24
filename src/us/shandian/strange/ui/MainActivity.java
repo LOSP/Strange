@@ -43,7 +43,6 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 {
 	private static final int DRAWER_MAIN_NEW = 0;
 	private static final int DRAWER_MAIN_CLOSE = 1;
-	private static final int DRAWER_MAIN_REMOUNT = 2;
 	
 	private DrawerLayout mDrawer;
 	private ListView mDrawerList;
@@ -277,14 +276,6 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 					}
 					mAdapter.removeItem(mAdapter.getCurrent());
 					break;
-				case DRAWER_MAIN_REMOUNT:
-					BaseFragment f = mAdapter.getItem(mAdapter.getCurrent());
-					if (f instanceof FileFragment) {
-						((FileFragment) f).remount();
-						f.onActivate();
-						mDrawer.closeDrawer(Gravity.START);
-					}
-					break;
 					
 			}
 		} else if (parent == mFileActions) {
@@ -294,11 +285,6 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 					break;
 				case R.string.drawer_file_action_delete:
 					mDrawer.closeDrawer(Gravity.END);
-					// Show alert if the path is not remounted to rw
-					if (!mSelectedUtils.canWrite()) {
-						alertRemount();
-						break;
-					}
 					
 					mProgress.show();
 					// Run commands in FileUtils to delete
@@ -352,24 +338,6 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 		mDrawer.openDrawer(Gravity.END);
 	}
 	
-	public void setWritablity(boolean rw) {
-		TextView remount = (TextView) mDrawerList.getChildAt(DRAWER_MAIN_REMOUNT);
-		if (rw) {
-			remount.setText(getResources().getString(R.string.drawer_remount) + " " +
-							getResources().getString(R.string.writablity_ro));
-		} else {
-			remount.setText(getResources().getString(R.string.drawer_remount) + " " +
-							getResources().getString(R.string.writablity_rw));
-		}
-	}
-	
-	public void disableRemount() {
-		TextView remount = (TextView) mDrawerList.getChildAt(DRAWER_MAIN_REMOUNT);
-		
-		remount.setText(getResources().getString(R.string.drawer_remount) + 
-						getResources().getString(R.string.drawer_remount_none));
-	}
-	
 	private void allReload() {
 		for (int i = 0; i < mAdapter.getCount(); i++) {
 			BaseFragment f = mAdapter.getItem(i);
@@ -377,22 +345,6 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 				((FileFragment) f).loadFiles();
 			}
 		}
-	}
-	
-	private void alertRemount() {
-		// Alert to remount
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setNegativeButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int id) {
-					dialog.cancel();
-				}
-		});
-		builder.setMessage(R.string.msg_remount);
-		builder.create().show();
-		
-		// Open left drawer to remind the user
-		mDrawer.openDrawer(Gravity.START);
 	}
 	
 	private void showProperties() {
