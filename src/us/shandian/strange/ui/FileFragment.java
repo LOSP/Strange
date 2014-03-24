@@ -4,6 +4,7 @@ import android.view.View;
 import android.widget.AdapterView;
 
 import java.lang.NullPointerException;
+import java.io.IOException;
 
 import us.shandian.strange.R;
 import us.shandian.strange.type.FileItem;
@@ -46,29 +47,6 @@ public class FileFragment extends BaseFileFragment
 			// Permission denied, use root
 			mFileUtils = new RootFileUtils(mDir);
 			mFiles = mFileUtils.getFileItems();
-		}
-	}
-	
-	@Override
-	protected void initUsageStatistics() {
-		// Load usage statistics
-		if (mFileUtils.getUsedPercentage() != -1) {
-			// Statistics are available
-			if (DEBUG) {
-				android.util.Log.d(TAG, "Usage statistics available for " + mDir);
-				android.util.Log.d(TAG, "Used = " + mFileUtils.getUsed() + " Free = " + mFileUtils.getFree() + " Percentage = " + mFileUtils.getUsedPercentage());
-			}
-			
-			mUsage.setVisibility(View.VISIBLE);
-			
-			// Calculate percentage to with
-			mUsageProgress.setTranslationX(- new Float(getActivity().getWindowManager().getDefaultDisplay().getWidth() * (1 - mFileUtils.getUsedPercentage() / 100.0f)).intValue());
-			
-			// Display as text
-			mUsed.setText(getActivity().getResources().getString(R.string.statistics_used) + " " + mFileUtils.getUsed());
-			mFree.setText(mFileUtils.getFree() + " " + getActivity().getResources().getString(R.string.statistics_free));
-		} else {
-			mUsage.setVisibility(View.GONE);
 		}
 	}
 	

@@ -43,13 +43,6 @@ public class BaseFileFragment extends BaseFragment implements OnItemClickListene
 	
 	protected FileAdapter mAdapter;
 
-	// Usage statistics
-	protected RelativeLayout mUsage;
-	protected TextView mUsageProgress;
-	protected TextView mUsed;
-	protected TextView mFree;
-	protected TextView mWritablity;
-	
 	protected ArrayList<FileItem> mFiles;
 
 	// Pull To Refresh
@@ -74,9 +67,6 @@ public class BaseFileFragment extends BaseFragment implements OnItemClickListene
 			mGrid.setVisibility(View.VISIBLE);
 			mLoaderFinished = true;
 
-			// Show usage status too
-			initUsageStatistics();
-
 			// Refresh finish
 			mPullToRefresh.setRefreshComplete();
 		}
@@ -88,12 +78,6 @@ public class BaseFileFragment extends BaseFragment implements OnItemClickListene
 		View view = inflater.inflate(R.layout.fragment_file, null);
 		mProgress = (ProgressBar) view.findViewById(R.id.fragment_file_wait);
 		mGrid = (GridView) view.findViewById(R.id.fragment_file_grid);
-		mUsage = (RelativeLayout) view.findViewById(R.id.fragment_file_usage);
-		mUsageProgress = (TextView) view.findViewById(R.id.fragment_file_usage_progress);
-		mUsed = (TextView) view.findViewById(R.id.fragment_file_usage_used);
-		mFree = (TextView) view.findViewById(R.id.fragment_file_usage_free);
-		mWritablity = (TextView) view.findViewById(R.id.fragment_file_usage_writablity);
-
 		mGrid.setDrawingCacheEnabled(true);
 		
 		// Pull To Refresh
@@ -134,9 +118,6 @@ public class BaseFileFragment extends BaseFragment implements OnItemClickListene
 	
 	protected void doLoadFiles() {
 		// Should be Overridden
-	}
-	
-	protected void initUsageStatistics() {
 	}
 	
 	@Override

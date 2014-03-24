@@ -29,11 +29,6 @@ public class FileUtils
 	
 	private File mDir;
 	
-	// Usage statistics
-	private int mUsedPercentage = -1;
-	private String mUsed = ""; // Human-readable string (df -h)
-	private String mFree = "";
-	
 	// CMDProcessor
 	protected CMDProcessor mCmd = CMDProcessor.instance();
 	
@@ -91,87 +86,6 @@ public class FileUtils
 	
 	public String getParent() {
 		return isRoot() ? mDir.getPath() : mDir.getPath().substring(0, mDir.getPath().lastIndexOf("/"));
-	}
-	
-	public int getUsedPercentage() {
-		return mUsedPercentage;
-	}
-	
-	public String getUsed() {
-		return mUsed;
-	}
-	
-	public String getFree() {
-		return mFree;
-	}
-	
-	private void getUsageStatistics() throws IOException {
-		// Real path
-		String path = mDir.getCanonicalPath();
-		if (DEBUG) {
-			android.util.Log.d(TAG, "CanonicalPath = " + path);
-		}
-		
-		// Ask shell for those data
-		String shell = mCmd.sh.runWaitFor("busybox df -h").stdout;
-		
-		if (shell == null) return;
-		
-		// A lot to process
-		BufferedReader r = new BufferedReader(new StringReader(shell));
-		
-		String line = r.readLine();
-		
-		while (line != null) {
-			// Read line by line, be patient
-			String[] items = line.split(" ");
-			if (items.length == 1) {
-				line = line + " " + r.readLine();
-				items = line.split(" ");
-			}
-			int itemNum = 0;
-			String tmpUsed = "";
-			String tmpFree = "";
-			String tmpPercentage = "";
-			String tmpPath = "";
-			for (String item : items) {
-				if (!item.trim().equals("")) {
-					if (DEBUG) {
-						android.util.Log.d("Strange", "item = " + item + " num = " + itemNum);
-					}
-					
-					switch (itemNum) {
-						case 2:
-							tmpUsed = item;
-							break;
-						case 3:
-							tmpFree = item;
-							break;
-						case 4:
-							tmpPercentage = item;
-							break;
-						case 5:
-							tmpPath = item;
-							break;
-					}
-					
-					itemNum++;
-				}
-			}
-			
-			if (!tmpPath.trim().equals("") && path.startsWith(tmpPath)) {
-				// Finally I found you
-				if (DEBUG) {
-					android.util.Log.d(TAG, "percent = " + tmpPercentage);
-				}
-				mUsed = tmpUsed + "B";
-				mFree = tmpFree + "B";
-				mUsedPercentage = Integer.parseInt(tmpPercentage.replace("%", ""));
-				break;
-			}
-			
-			line = r.readLine();
-		}
 	}
 	
 	private static FileType getFileType(FileItem item) {

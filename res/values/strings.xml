@@ -16,10 +16,6 @@
 	<string name="drawer_file_action_delete">Delete</string>
 	<string name="drawer_file_action_view_archive">View Archive</string>
 	
-	<!-- Usage Statistics -->
-	<string name="statistics_used">Used</string>
-	<string name="statistics_free">Free</string>
-	
 	<!-- Messages -->
 	<string name="msg_wait">Please wait...</string>
 	
