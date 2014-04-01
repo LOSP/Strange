@@ -90,7 +90,7 @@ public class BaseFileFragment extends BaseFragment implements OnItemClickListene
 			.setup(mPullToRefresh);
 		
 		mPullToRefresh.setBackgroundColor(getResources()
-								.getColor(android.R.color.holo_green_dark));
+								.getColor(R.color.gray));
 
 		loadFiles();
 

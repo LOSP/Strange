@@ -25,18 +25,6 @@ public class FileAdapter extends BaseAdapter
 {
 	private static final String TAG = FileAdapter.class.getSimpleName();
 	
-	private static final int[] COLORS = new int[] {
-		android.R.color.holo_blue_light,
-		android.R.color.holo_green_dark,
-		android.R.color.holo_orange_light,
-		android.R.color.holo_red_light,
-		android.R.color.holo_red_dark,
-		android.R.color.holo_blue_bright,
-		android.R.color.holo_purple,
-		android.R.color.holo_orange_dark,
-		android.R.color.holo_green_light
-	};
-	
 	private Context mContext;
 	private ArrayList<FileItem> mFiles;
 	
@@ -166,12 +154,12 @@ public class FileAdapter extends BaseAdapter
 
 				colorText.setText(f.name.substring(0, 1));
 				fileName.setText(f.name);
-
-				char first = f.name.charAt(0);
-				colorText.setBackgroundResource(COLORS[first % COLORS.length]);
-
+				
 				if (f.isDir) {
 					colorText.getPaint().setFakeBoldText(true);
+					colorText.setBackgroundResource(R.color.gray);
+				} else {
+					colorText.setBackgroundResource(R.color.gray_light);
 				}
 
 				if (f.isSymLink) {
