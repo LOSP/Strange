@@ -16,6 +16,7 @@
 	<string name="drawer_file_action_property">Properties</string>
 	<string name="drawer_file_action_delete">Delete</string>
 	<string name="drawer_file_action_view_archive">View Archive</string>
+	<string name="drawer_file_action_view_git">View Git Repo</string>
 	
 	<!-- Messages -->
 	<string name="msg_wait">Please wait...</string>

@@ -102,12 +102,26 @@ public class FileUtils
 		}
 	}
 	
+	private static boolean isGitRepo(FileItem dir) {
+		File f = new File(dir.path + "/.git");
+		if (f.exists() && f.isDirectory()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	public static Integer[] getFileActions(FileItem item) {
 		// What can we do for this file
 		ArrayList<Integer> ret = new ArrayList<Integer>();
 		FileType type = getFileType(item);
 		if (type == FileType.FLODER) {
 			ret.add(R.string.drawer_file_action_enter);
+			
+			if (isGitRepo(item)) {
+				ret.add(R.string.drawer_file_action_view_git);
+			}
+			
 		} else if (type == FileType.PACKAGE) {
 			ret.add(R.string.drawer_file_action_install);
 			ret.add(R.string.drawer_file_action_view_archive);

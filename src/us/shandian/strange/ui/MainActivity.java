@@ -309,6 +309,12 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 					mAdapter.addItem(new ArchiveFragment(mSelected.path));
 					mAdapter.setCurrentItem(mAdapter.getCount() - 1);
 					break;
+				case R.string.drawer_file_action_view_git:
+					// Create fragment to view the repo
+					mDrawer.closeDrawer(Gravity.END);
+					mAdapter.addItem(new GitFragment(mSelected.path));
+					mAdapter.setCurrentItem(mAdapter.getCount() - 1);
+					break;
 				case R.string.drawer_file_action_property:
 					mDrawer.closeDrawer(Gravity.END);
 					
