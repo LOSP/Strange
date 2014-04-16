@@ -7,21 +7,26 @@
 
 	<TextView
 		android:layout_height="wrap_content"
+		android:text="abcdefghijklmnopqrstuvwxyz"
+		android:textAppearance="?android:attr/textAppearanceSmall"
+		android:layout_width="wrap_content"
+		android:textColor="#565656"
+		android:id="@+id/fragment_git_history_commit_id"
+		android:singleLine="true"
+		android:textSize="12sp"
+		android:gravity="center_vertical"
+		android:layout_marginLeft="5dp"/>
+
+	<TextView
+		android:layout_height="45dp"
 		android:text="I'm a commit"
 		android:textAppearance="?android:attr/textAppearanceMedium"
 		android:layout_width="wrap_content"
 		android:id="@+id/fragment_git_history_commit_name"
 		android:layout_alignParentStart="true"
-		android:singleLine="true"/>
-
-	<TextView
-		android:layout_height="wrap_content"
-		android:text="1997-01-01"
-		android:textAppearance="?android:attr/textAppearanceSmall"
-		android:layout_width="wrap_content"
-		android:id="@+id/fragment_git_history_commit_date"
-		android:textColor="#878787"
-		android:layout_alignParentEnd="true"/>
+		android:layout_below="@id/fragment_git_history_commit_id"
+		android:layout_marginTop="10dp"
+		android:layout_marginLeft="5dp"/>
 
 	<TextView
 		android:layout_height="wrap_content"
@@ -31,22 +36,20 @@
 		android:layout_below="@id/fragment_git_history_commit_name"
 		android:id="@+id/fragment_git_history_commit_commiter"
 		android:layout_marginTop="10dp"
-		android:textColor="#222222"/>
+		android:textColor="#797979"
+		android:layout_marginLeft="5dp"/>
 
 	<TextView
 		android:layout_height="wrap_content"
-		android:text="abcdefghijklmnopqrstuvwxyz"
+		android:text="1997-01-01"
 		android:textAppearance="?android:attr/textAppearanceSmall"
 		android:layout_width="wrap_content"
+		android:id="@+id/fragment_git_history_commit_date"
+		android:textColor="#878787"
+		android:layout_toRightOf="@id/fragment_git_history_commit_commiter"
 		android:layout_below="@id/fragment_git_history_commit_name"
 		android:layout_marginTop="10dp"
-		android:textColor="#565656"
-		android:id="@+id/fragment_git_history_commit_id"
-		android:layout_toRightOf="@id/fragment_git_history_commit_commiter"
-		android:layout_marginLeft="5dp"
-		android:singleLine="true"
-		android:textSize="10sp"
-		android:gravity="center_vertical"/>
+		android:layout_marginLeft="5dp"/>
 
 </RelativeLayout>
 
