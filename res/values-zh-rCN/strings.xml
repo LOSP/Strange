@@ -11,6 +11,7 @@
 	<string name="drawer_file_title_default">没有选中的文件</string>
 	<string name="drawer_file_action_enter">进入</string>
 	<string name="drawer_file_action_install">安装</string>
+	<string name="drawer_file_action_force_install">强制安装(ROOT)</string>
 	<string name="drawer_file_action_property">属性</string>
 	<string name="drawer_file_action_delete">删除</string>
 	<string name="drawer_file_action_view_archive">查看压缩包</string>
@@ -19,6 +20,7 @@
 	<!-- Messages -->
 	<string name="msg_wait">请稍候...</string>
 	<string name="msg_grant">访问被拒绝，请尝试获取ROOT权限</string>
+	<string name="msg_force_install">在app出现之前，您可能需要等几分钟，或者重启手机</string>
 	
 	<!-- Properties -->
 	<string name="prop_path">路径:</string>

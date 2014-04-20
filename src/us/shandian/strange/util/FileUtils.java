@@ -30,7 +30,7 @@ public class FileUtils
 	private File mDir;
 	
 	// CMDProcessor
-	protected CMDProcessor mCmd = CMDProcessor.instance();
+	protected static CMDProcessor mCmd = CMDProcessor.instance();
 	
 	public FileUtils(String dir) {
 		mDir = new File(dir);
@@ -124,6 +124,7 @@ public class FileUtils
 			
 		} else if (type == FileType.PACKAGE) {
 			ret.add(R.string.drawer_file_action_install);
+			ret.add(R.string.drawer_file_action_force_install);
 			ret.add(R.string.drawer_file_action_view_archive);
 		} else if (type == FileType.ARCHIVE) {
 			ret.add(R.string.drawer_file_action_view_archive);

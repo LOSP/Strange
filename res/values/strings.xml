@@ -13,6 +13,7 @@
 	<string name="drawer_file_title_default">No File Selected</string>
 	<string name="drawer_file_action_enter">Enter</string>
 	<string name="drawer_file_action_install">Install</string>
+	<string name="drawer_file_action_force_install">Force Install(ROOT)</string>
 	<string name="drawer_file_action_property">Properties</string>
 	<string name="drawer_file_action_delete">Delete</string>
 	<string name="drawer_file_action_view_archive">View Archive</string>
@@ -21,6 +22,7 @@
 	<!-- Messages -->
 	<string name="msg_wait">Please wait...</string>
 	<string name="msg_grant">Permission denied, please try to grant root permission</string>
+	<string name="msg_force_install">Please wait for minutes or reboot before the app shows up on your phone.</string>
 	
 	<!-- Properties -->
 	<string name="prop_path">Path:</string>

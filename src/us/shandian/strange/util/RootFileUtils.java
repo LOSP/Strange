@@ -1,5 +1,7 @@
 package us.shandian.strange.util;
 
+import android.content.pm.PackageManager;
+
 import java.util.ArrayList;
 
 import us.shandian.strange.type.FileItem;
@@ -86,5 +88,13 @@ public class RootFileUtils extends FileUtils
 	@Override
 	protected String getDirSize(FileItem item) {
 		return mCmd.su.runWaitFor("busybox du -sk " + item.path).stdout;
+	}
+	
+	public static void forceInstallPackage(PackageManager pm, FileItem item) {
+		String packageName = pm.getPackageArchiveInfo(item.path, PackageManager.GET_ACTIVITIES).packageName;
+		String dataPath = "/data/app/" + packageName + "-1.apk";
+		mCmd.su.runWaitFor("busybox cp " + item.path + " " + dataPath);
+		mCmd.su.runWaitFor("busybox chmod 0777 " + dataPath);
+		mCmd.su.runWaitFor("busybox chown system:system " + dataPath);
 	}
 }

@@ -38,6 +38,7 @@ import us.shandian.strange.adapter.FragmentTabsAdapter;
 import us.shandian.strange.type.FileItem;
 import us.shandian.strange.util.CMDProcessor;
 import us.shandian.strange.util.FileUtils;
+import us.shandian.strange.util.RootFileUtils;
 
 public class MainActivity extends FragmentActivity implements OnItemClickListener
 {
@@ -327,6 +328,18 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 						}
 					}).start();
 					break;
+				case R.string.drawer_file_action_force_install:
+					mDrawer.closeDrawer(Gravity.END);
+					
+					mProgress.show();
+					new Thread(new Runnable() {
+						@Override
+						public void run() {
+							forceInstall();
+							mHandler.sendEmptyMessage(1);
+						}
+					}).start();
+					break;
 			}
 		}
 	}
@@ -370,6 +383,22 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 			}
 		});
 		
+		// Call main thread to show the dialog
+		mHandler.sendMessage(mHandler.obtainMessage(2, dBuilder));
+	}
+	
+	private void forceInstall() {
+		RootFileUtils.forceInstallPackage(getPackageManager(), mSelected);
+		AlertDialog.Builder dBuilder = new AlertDialog.Builder(this);
+		dBuilder.setTitle(R.string.drawer_file_action_force_install);
+		dBuilder.setMessage(R.string.msg_force_install);
+		dBuilder.setNegativeButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+			}
+		});
+
 		// Call main thread to show the dialog
 		mHandler.sendMessage(mHandler.obtainMessage(2, dBuilder));
 	}
